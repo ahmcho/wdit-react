@@ -4,38 +4,31 @@ import wditAPI from '../api/wdit';
 const Landing = () => {
     const [message, setMessage] = useState('');
     const [trips, setTrips] = useState('');
+    const [token, setToken] = useState('');
     
-    const loginUserAndSetToken = async () => {
+    const getTrips = async () => {
         try {
-            const res = await wditAPI.post('/api/users/login', {
-                email: 'prod_user@test.com',
-                password: 'produser134'
-            })
-            const token = res.data.data;
-            console.log('Token :', token);
-            await localStorage.setItem('token', token);
-            window.location.href = "/"
+            const res = await wditAPI.get('/api/trips');
+            const foundData = res.data.data;
+            console.log(foundData)
+            setTrips(foundData)
         } catch (error) {
-            setMessage(error.message)
+            const message = error.message;
+            if(message.includes('404')){
+                setMessage('No trips found')
+            } else {
+                setMessage('Unauthorized')
+            }
         }
     }
+
     useEffect( () => {
-        const getTrips = async () => {
-            try {
-                const res = await wditAPI.get('/api/trips');
-                
-                const foundData = res.data.data;
-                console.log(foundData)
-                setTrips(foundData)
-            } catch (error) {
-                const message = error.message;
-                if(message.includes('404')){
-                    setMessage('No trips found')
-                } else {
-                    setMessage('Unauthorized')
-                }
-            }
-            
+        const tokenFromStorage = localStorage.getItem('token');
+        if(tokenFromStorage === null){
+            setToken(null);
+            return null;
+        } else {
+            setToken(tokenFromStorage);
         }
         getTrips();
     },[])
@@ -43,7 +36,7 @@ const Landing = () => {
     return(
         <section>
             <h1>WhereDidITravel?</h1>
-            {message === "Unauthorized" ? <button onClick={loginUserAndSetToken}>Log In</button> : ''}
+            {message === "Unauthorized" || token === null ? <button onClick={loginUserAndSetToken}>Log In</button> : ''}
             { trips.length ? 'Here are your trips: ' : ''}
             {Object.values(trips).map(trip =>{
                 return <p key={trip._id}>Location: {trip.location}</p>
