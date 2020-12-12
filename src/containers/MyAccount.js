@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import jwt_decode from 'jwt-decode';
-import Form from '../components/Form';
+import TripForm from '../components/TripForm';
 
 const MyAccount = () => {
     const [name, setName] = useState('');
@@ -30,7 +30,7 @@ const MyAccount = () => {
                 ? (
                     <div>
                         <p>Welcome, {name}!</p>
-                        <Form />
+                        <TripForm />
                         <button onClick={handleLogout}>Log out</button>
                     </div>
                 ) : (
