@@ -1,4 +1,6 @@
 import React,{useEffect, useState} from 'react';
+import { Link } from 'react-router-dom';
+import MapComponent from '../components/MapComponent';
 import wditAPI from '../api/wdit';
 
 const Landing = () => {
@@ -10,8 +12,7 @@ const Landing = () => {
         try {
             const res = await wditAPI.get('/api/trips');
             const foundData = res.data.data;
-            console.log(foundData)
-            setTrips(foundData)
+            setTrips(foundData);
         } catch (error) {
             const message = error.message;
             if(message.includes('404')){
@@ -36,11 +37,13 @@ const Landing = () => {
     return(
         <section>
             <h1>WhereDidITravel?</h1>
-            {message === "Unauthorized" || token === null ? <button onClick={loginUserAndSetToken}>Log In</button> : ''}
-            { trips.length ? 'Here are your trips: ' : ''}
-            {Object.values(trips).map(trip =>{
-                return <p key={trip._id}>Location: {trip.location}</p>
-            })}
+            {token && (
+                <div>
+                { trips.length ? 'Here are your trips: ' : ''}
+                <MapComponent trips={trips}/>
+                </div>
+            )}
+            {message === "Unauthorized" || token === null ? <Link to="/login">Log In</Link> : ''}
         </section>
     )
 }
