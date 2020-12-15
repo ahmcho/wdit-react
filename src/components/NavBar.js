@@ -8,7 +8,7 @@ const NavBar = () => {
     if(acquiredToken){
       setToken(acquiredToken);
     }
-  },[]);
+  },[token]);
 
     return(
         <ul>
