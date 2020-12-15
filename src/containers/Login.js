@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 //import AuthForm from '../components/AuthForm';
 import wditAPI from '../api/wdit';
 
-const Login = () => {
+const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -14,9 +14,8 @@ const Login = () => {
                 password
             })
             const token = res.data.data;
-            console.log('Token :', token);
             await localStorage.setItem('token', token);
-            window.location.href = "/"
+            window.location = "/";
         } catch (error) {
             throw new Error(error.message);
         }
