@@ -11,17 +11,7 @@ const MapComponent = ({ trips }) => {
   const [ selected, setSelected ] = useState({});
   const [ currentPosition, setCurrentPosition ] = useState({});
 
-  const success = position => {
-    const currentPosition = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    }
-    setCurrentPosition(currentPosition);
-  };
-
-  const onSelect = item => {
-    setSelected(item);
-  };
+  const onSelect = item => setSelected(item);
 
   const onLoad = useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
@@ -33,9 +23,31 @@ const MapComponent = ({ trips }) => {
     setMap(null)
   }, []);
 
+  const getPosition = () => {
+    return new Promise((res, rej) => {
+        navigator.geolocation.getCurrentPosition(res, rej);
+    });
+  }
+
+  const setPositionFromGeolocation = async () => {
+    try {
+      const res = await	getPosition(); // wait for getPosition to complete
+      const currentPosition = {
+        lat: res.coords.latitude,
+        lng: res.coords.longitude
+      }
+      setCurrentPosition(currentPosition);
+    } catch (error) {
+      console.error(error);
+    }
+    
+  }
+  
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(success);
-  });
+    setPositionFromGeolocation(); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[trips]);
+  
     return (
        <LoadScript
       googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
