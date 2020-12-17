@@ -17,4 +17,11 @@ instance.interceptors.request.use(
     }
 );
 
+instance.interceptors.response.use(function (response) {
+    return response;
+  }, function (error) {
+    const errorJSON = JSON.parse(error.request.response);
+    return Promise.reject(errorJSON.message)
+});
+
 export default instance;
