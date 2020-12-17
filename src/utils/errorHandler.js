@@ -1,6 +1,9 @@
 const errorHandler = (error) => {
     let message = '';
     if(error.includes('email')){
+        if(error.includes('in use')){
+            return error;
+        }
         message += 'Email is required! ';
     }
     if(error.includes('password')){
@@ -19,7 +22,7 @@ const errorHandler = (error) => {
         message += 'Name is required! ';
     }
     if(error.includes('age')){
-        message += 'You are too young to use this service! ';
+        message += error.split('age: ')[1];
     }
 
     return message;
