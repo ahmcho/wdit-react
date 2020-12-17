@@ -9,6 +9,7 @@ const Login = (props) => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        console.log(props);
         try {
             const res = await wditAPI.post('/api/users/login', {
                 email,

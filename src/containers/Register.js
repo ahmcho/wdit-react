@@ -27,10 +27,10 @@ const Register = () => {
     return(
         <div>
             <p>Welcome! Here you can register for WhereDidITravel</p>
-            <form onSubmit={onSubmit}>
             {errorMessage && (
                     <p style={{color: 'red'}}>{errorMessage}</p>
             )}
+            <form onSubmit={onSubmit}>
                 <input type="email" placeholder="Your email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Your password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <input type="number" placeholder="Your age" value={age} onChange={(e) => setAge(e.target.value)} />
