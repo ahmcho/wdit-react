@@ -14,12 +14,7 @@ const Landing = () => {
             const foundData = res.data.data;
             setTrips(foundData);
         } catch (error) {
-            const message = error.message;
-            if(message.includes('404')){
-                setMessage('No trips found')
-            } else {
-                setMessage('Unauthorized')
-            }
+            setMessage(error);
         }
     }
 
@@ -39,8 +34,9 @@ const Landing = () => {
             <h1>WhereDidITravel?</h1>
             {token && (
                 <div>
-                { trips.length ? 'Here are your trips: ' : ''}
-                <MapComponent trips={trips}/>
+                { trips.length ? (
+                    <MapComponent trips={trips}/>
+                ) : 'No trips found'}
                 </div>
             )}
             {message === "Unauthorized" || token === null ? <Link to="/login">Log In</Link> : ''}
