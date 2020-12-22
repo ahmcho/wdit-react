@@ -4,6 +4,7 @@ import NavBar from './components/NavBar';
 import About from './containers/About';
 import MyAccount from './containers/MyAccount';
 import Login from './containers/Login';
+import Trip from './containers/Trip';
 import Register from './containers/Register';
 
 // import { Provider } from 'react-redux';
@@ -21,6 +22,7 @@ const  App = () => {
           <Route path="/dashboard" component={MyAccount} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
+          <Route path="/trips/:tripId" component={Trip} />
         </Switch>
     </Router>
   );
