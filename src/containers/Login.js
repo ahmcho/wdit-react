@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {Redirect} from 'react-router-dom';
 //import AuthForm from '../components/AuthForm';
 import wditAPI from '../api/wdit';
 
-const Login = (props) => {
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [token, setToken] = useState('');
 
+    useEffect(() => {
+        if(localStorage.getItem('token') !== null){
+            setToken(localStorage.getItem('token'));
+        }
+    }, [token]);
+    
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log(props);
         try {
-            const res = await wditAPI.post('/api/users/login', {
-                email,
-                password
-            })
+            const res = await wditAPI.post('/api/users/login', { email, password});
             if(res){
-                const token = res.data.data;
-                await localStorage.setItem('token', token);
+                const ls_token = res.data.data;
+                await localStorage.setItem('token', ls_token);
+                setToken(ls_token);
                 window.location = "/";
             }
         } catch (error) {
@@ -25,8 +30,10 @@ const Login = (props) => {
         }
     }
 
-    return(
-       <div>
+    return token ? (
+       <Redirect to="/" />
+    ) : (
+        <div>
             <p>Sign in to your account</p>
                 {errorMessage && (
                     <p style={{color: 'red'}}>{errorMessage}</p>
@@ -37,7 +44,7 @@ const Login = (props) => {
                 <button>Login</button>
             </form>
        </div>
-    );
+    )
 }
 
 export default Login;
