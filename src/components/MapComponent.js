@@ -1,4 +1,5 @@
 import React, { useState, memo} from 'react';
+import { Link } from 'react-router-dom';
 import { GoogleMap, LoadScript, InfoWindow } from '@react-google-maps/api';
 import MarkerList from '../components/MarkerList';
 import getCurrentLocation from '../utils/getCurrentLocation';
@@ -39,7 +40,10 @@ const MapComponent = ({ trips }) => {
               clickable={true}
               onCloseClick={() => setSelected({})}
             >
-              <p>{selected.description}</p>
+              <>
+                <Link to={`/trips/${selected._id}`}>{selected.description}</Link>
+                <p>Rating: {selected.rating}</p>
+              </>
             </InfoWindow>
             )
           }
