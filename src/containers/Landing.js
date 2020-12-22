@@ -5,7 +5,7 @@ import wditAPI from '../api/wdit';
 
 const Landing = () => {
     const [message, setMessage] = useState('');
-    const [trips, setTrips] = useState('');
+    const [trips, setTrips] = useState({});
     const [token, setToken] = useState('');
     
     const getTrips = async () => {
@@ -34,8 +34,11 @@ const Landing = () => {
             <h1>WhereDidITravel?</h1>
             {token && (
                 <div>
-                { trips.length ? (
-                    <MapComponent trips={trips}/>
+                {trips.length ? (
+                    <>
+                        <MapComponent trips={trips}/>
+                        <small>Zoom out to see all trips</small>
+                    </>
                 ) : 'No trips found'}
                 </div>
             )}
