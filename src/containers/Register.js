@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import wditAPI from '../api/wdit';
-import errorHandler from '../utils/errorHandler';
+import ErrorMessage from '../components/ErrorMessage';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -20,16 +20,14 @@ const Register = () => {
             })
             window.location.href = "/login"
         } catch (error) {
-            setErrorMessage(errorHandler(error));
+            setErrorMessage(error);
         }
     }
 
     return(
         <div>
             <p>Welcome! Here you can register for WhereDidITravel</p>
-            {errorMessage && (
-                    <p style={{color: 'red'}}>{errorMessage}</p>
-            )}
+            <ErrorMessage message={errorMessage}/>
             <form onSubmit={onSubmit}>
                 <input type="email" placeholder="Your email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Your password" value={password} onChange={(e) => setPassword(e.target.value)} />
