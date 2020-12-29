@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-.eslintcache
 .env
 
 # testing
@@ -12,6 +11,10 @@
 
 # production
 /build
+
+# cache
+.eslintcache
+.cache
 
 # misc
 .DS_Store
