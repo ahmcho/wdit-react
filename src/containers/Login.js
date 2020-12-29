@@ -1,42 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import {Redirect} from 'react-router-dom';
-//import AuthForm from '../components/AuthForm';
-import wditAPI from '../api/wdit';
+import {connect} from 'react-redux';
+import { loginUser } from "../actions/auth";
+import { clearErrors } from "../actions/error";
 
-const Login = () => {
+//import AuthForm from '../components/AuthForm';
+
+const Login = ({ auth, error, loginUser,clearErrors, history }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [token, setToken] = useState('');
 
     useEffect(() => {
-        if(localStorage.getItem('token') !== null){
-            setToken(localStorage.getItem('token'));
+        clearErrors();
+        if (auth.isAuthenticated) {
+            history.push("/dashboard");
         }
-    }, [token]);
+    }, [auth]);
     
     const onSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const res = await wditAPI.post('/api/users/login', { email, password});
-            if(res){
-                const ls_token = res.data.data;
-                await localStorage.setItem('token', ls_token);
-                setToken(ls_token);
-                window.location = "/";
-            }
-        } catch (error) {
-            setErrorMessage(error);
-        }
+        const userData = { email, password };
+        loginUser(userData);
     }
 
-    return token ? (
-       <Redirect to="/" />
-    ) : (
+    return (
         <div>
             <p>Sign in to your account</p>
-                {errorMessage && (
-                    <p style={{color: 'red'}}>{errorMessage}</p>
+                {error && (
+                    <p style={{color: 'red'}}>{Object.values(error)}</p>
                 )}
             <form onSubmit={onSubmit}>
                 <input type="email" placeholder="Your email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -47,4 +37,12 @@ const Login = () => {
     )
 }
 
-export default Login;
+const mapStateToProps = state => ({
+    auth: state.auth,
+    error: state.error
+  });
+  
+  export default connect(
+    mapStateToProps,
+    { loginUser, clearErrors }
+  )(Login);

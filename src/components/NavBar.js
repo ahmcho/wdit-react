@@ -1,15 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
 
-const NavBar = () => {
-  const [token, setToken] = useState('');
-  useEffect( () => {
-    const acquiredToken = localStorage.getItem("token");
-    if(acquiredToken){
-      setToken(acquiredToken);
-    }
-  },[token]);
-
+const NavBar = ({auth}) => {
     return(
         <ul>
           <li>
@@ -18,7 +11,7 @@ const NavBar = () => {
           <li>
             <Link to="/about">About</Link>
           </li>
-          { !token ? (
+          {!auth.isAuthenticated  ? (
             <div>
               <li>
                 <Link to="/register">Register</Link>
@@ -36,4 +29,10 @@ const NavBar = () => {
     )
 }
 
-export default NavBar;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+)(NavBar);

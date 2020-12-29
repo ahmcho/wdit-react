@@ -1,29 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import {Redirect} from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
+import { connect } from "react-redux";
+import { logoutUser } from '../actions/auth';
 import TripForm from '../components/TripForm';
 
-const MyAccount = () => {
+const MyAccount = ({auth,logoutUser}) => {
     const [name, setName] = useState('');
-
     useEffect(() => {
-        let token = localStorage.getItem('token');
-        if(token){
-            const decoded = jwt_decode(token);
-            const name = decoded.name;
-            setName(name);
+        if(auth){
+            setName(auth.user.name);
         } else {
             setName(null);
         }
-    }, []);
+    }, [auth]);
 
-    const handleLogout = () => {
-        let token = localStorage.getItem('token');
-        if(!token){
-            this.disabled = true;
-        } else {
-            localStorage.removeItem('token');
-        } 
+    const handleLogout = (e) => {
+        e.preventDefault();
+        logoutUser();
         window.location.href = "/"
     }
 
@@ -47,4 +39,12 @@ const MyAccount = () => {
     )
 }
 
-export default MyAccount;
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+  
+export default connect(
+    mapStateToProps,
+    { logoutUser }
+)(MyAccount);
+  

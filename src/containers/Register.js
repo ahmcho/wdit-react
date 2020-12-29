@@ -1,33 +1,33 @@
-import React, {useState} from 'react';
-import wditAPI from '../api/wdit';
+import React, {useState, useEffect} from 'react';
+import {connect} from 'react-redux';
+import { registerUser } from "../actions/auth";
+import { clearErrors } from "../actions/error";
 import ErrorMessage from '../components/ErrorMessage';
 
-const Register = () => {
+const Register = ({auth, error, registerUser, clearErrors, history}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [age, setAge] = useState(0);
-    const [errorMessage, setErrorMessage] = useState('');
 
+    
+    useEffect(() => {
+        clearErrors();
+        if (auth.isAuthenticated) {
+            history.push("/dashboard");
+        }
+    }, [auth]);
+    
     const onSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await wditAPI.post('/api/users/register', {
-                email,
-                password,
-                name,
-                age
-            })
-            window.location.href = "/login"
-        } catch (error) {
-            setErrorMessage(error);
-        }
+        const userData = { email, password };
+        registerUser(userData);
     }
 
     return(
         <div>
             <p>Welcome! Here you can register for WhereDidITravel</p>
-            <ErrorMessage message={errorMessage}/>
+            <ErrorMessage message={error}/>
             <form onSubmit={onSubmit}>
                 <input type="email" placeholder="Your email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Your password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -41,4 +41,12 @@ const Register = () => {
     );
 }
 
-export default Register;
+const mapStateToProps = state => ({
+    auth: state.auth,
+    error: state.error
+});
+  
+export default connect(
+    mapStateToProps,
+    { registerUser, clearErrors }
+)(Register);
