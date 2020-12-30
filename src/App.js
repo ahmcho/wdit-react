@@ -6,29 +6,20 @@ import MyAccount from './containers/MyAccount';
 import Login from './containers/Login';
 import Trip from './containers/Trip';
 import Register from './containers/Register';
-
 import { Provider } from 'react-redux';
 import store from './store';
-
 import jwt_decode from "jwt-decode";
 import { setCurrentUser, logoutUser } from "./actions/auth";
-
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+
 if (localStorage.token) {
-  // Set auth token header auth
   const token = localStorage.token;
-  // Decode token and get user info and exp
   const decoded = jwt_decode(token);
-  // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
-  // Check for expired token
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
-    // Logout user
     store.dispatch(logoutUser());
-
-    // Redirect to login
     window.location.href = "/login";
   }
 }
