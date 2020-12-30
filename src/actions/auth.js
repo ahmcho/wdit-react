@@ -1,5 +1,4 @@
 import wditAPI from '../api/wdit';
-//import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
@@ -49,11 +48,9 @@ export const setUserLoading = () => {
 };
 
 // Log user out
-export const logoutUser = () => dispatch => {
+export const logoutUser = (history) => dispatch => {
   // Remove token from local storage
   localStorage.removeItem("token");
-  // Remove auth header for future requests
-  //setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
 };
