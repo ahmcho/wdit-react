@@ -8,7 +8,7 @@ const initialState = {
   loading: false
 };
 
-export default function(state = initialState, action) {
+const auth = (state = initialState, action) => {
   switch (action.type) {
     case SET_CURRENT_USER:
       return {
@@ -25,3 +25,5 @@ export default function(state = initialState, action) {
       return state;
   }
 }
+
+export default auth;
