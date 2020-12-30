@@ -1,27 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from "react-redux";
+import {Redirect} from 'react-router-dom';
 import { logoutUser } from '../actions/auth';
 import TripForm from '../components/TripForm';
 
 const MyAccount = ({auth,logoutUser}) => {
     const [name, setName] = useState('');
+    
     useEffect(() => {
-        if(auth){
-            setName(auth.user.name);
-        } else {
-            setName(null);
-        }
+        auth.isAuthenticated && ( setName(auth.user.name) )
     }, [auth]);
 
     const handleLogout = (e) => {
         e.preventDefault();
         logoutUser();
-        window.location.href = "/"
     }
 
     return (
         <div>
-            {name 
+            {auth.isAuthenticated 
                 ? (
                     <div>
                         <p>Welcome, {name}!</p>
@@ -32,7 +29,7 @@ const MyAccount = ({auth,logoutUser}) => {
                         <button onClick={handleLogout}>Log out</button>
                     </div>
                 ) : (
-                    <p>Unauthorized</p>
+                    <Redirect to='/login' />
                 )
             }
         </div>
