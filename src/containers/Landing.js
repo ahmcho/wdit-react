@@ -1,49 +1,39 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import MapComponent from '../components/MapComponent';
-import wditAPI from '../api/wdit';
+import {getTrips} from '../actions/trips';
 
-const Landing = ({auth}) => {
-    const [message, setMessage] = useState('');
-    const [trips, setTrips] = useState({});
-    
-    const getTrips = async () => {
-        try {
-            const res = await wditAPI.get('/api/trips');
-            const foundData = res.data.data;
-            setTrips(foundData);
-        } catch (error) {
-            setMessage(error);
-        }
-    }
 
+const Landing = ({auth, getTrips, trips}) => {
     useEffect( () => {
         auth.isAuthenticated && ( getTrips() )
-    },[auth])
+    },[auth,getTrips])
 
     return(
         <section>
             <h1>WhereDidITravel?</h1>
             {auth.isAuthenticated ? (
                 <>
-                    {trips.length ? (
+                    {trips.trips ? (
                         <>
-                            <MapComponent trips={trips}/>
+                            <MapComponent trips={trips.trips}/>
                             <small>Zoom out to see all trips</small>
                         </>
                     ) : 'No trips found'}
                 </>
             ):(<Link to="/login">Log In</Link>)}
-            {message === "Unauthorized" ? <Link to="/login">Log In</Link> : ''}
         </section>
     )
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    trips: state.trips
 });
   
 export default connect(
-    mapStateToProps
+    mapStateToProps, {
+        getTrips
+    }
 )(Landing);
