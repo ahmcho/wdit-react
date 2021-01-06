@@ -12,7 +12,7 @@ const TripForm = ({formTitle, buttonTitle, data, handleDelete}) => {
         e.preventDefault();
         try {
             if(!data){
-                await wditAPI.post('/api/trips', { description, location });
+                await wditAPI.post('/api/trips', { description, location, rating });
             } else {
                 await wditAPI.patch(`/api/trips/${data._id}`, { description, rating });
             }
