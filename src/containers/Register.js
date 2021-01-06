@@ -16,7 +16,7 @@ const Register = ({auth, error, registerUser, clearErrors, history}) => {
         if (auth.isAuthenticated) {
             history.push("/dashboard");
         }
-    }, [auth]);
+    }, [auth,clearErrors,history]);
     
     const onSubmit = async (e) => {
         e.preventDefault();
