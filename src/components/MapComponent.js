@@ -1,20 +1,21 @@
 import React, { useState, memo, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
-import Locate from '../components/Locate';
 import { GoogleMap, useLoadScript, InfoWindow } from '@react-google-maps/api';
+
+import Locate from '../components/Locate';
 import MarkerList from '../components/MarkerList';
 import getCurrentLocation from '../utils/getCurrentLocation';
-
 import {libraries,mapContainerStyle,options}  from '../config/settings';
 
 let center;
 
-getCurrentLocation().then((data) => {
+getCurrentLocation().then((data) => { 
   center = data;
 });
 
-const MapComponent = ({ trips }) => { 
+const MapComponent = ({ trips }) => {
+
   const [ selected, setSelected ] = useState({});
   const mapRef = useRef();
   
@@ -24,11 +25,6 @@ const MapComponent = ({ trips }) => {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries
   });
-  
-  // const panTo = useCallback((lat,lng) => {
-  //   mapRef.current.panTo({lat,lng});
-  //   mapRef.current.setZoom(14);
-  // },[]);
   
   const onMapLoad = useCallback((map) => {
     mapRef.current = map;
@@ -42,7 +38,6 @@ const MapComponent = ({ trips }) => {
 
     return (
       <>
-      {/* <Locate mapRef={mapRef}/> */}
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}
@@ -68,7 +63,7 @@ const MapComponent = ({ trips }) => {
               </InfoWindow>
             )
           }
-      </GoogleMap>
+        </GoogleMap>
       </>
     );
 }
