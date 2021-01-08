@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode";
 
 import { GET_ERRORS, GET_TRIP, GET_TRIPS, UPDATE_TRIP, CREATE_TRIP, DELETE_TRIP } from "../actions/types";
 
-// Register User
+// Get user Trips
 export const getTrips =  () => async dispatch => {
     try {
       const trips = await wditAPI.get("/api/trips");
