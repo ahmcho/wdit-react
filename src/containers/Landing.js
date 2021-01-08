@@ -1,21 +1,17 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import MapComponent from '../components/MapComponent';
-import {getTrips} from '../actions/trips';
 
 
-const Landing = ({auth, getTrips, trips}) => {
-    useEffect( () => {
-        auth.isAuthenticated && ( getTrips() )
-    },[auth,getTrips])
-
-    return(
+const Landing = ({auth, trips}) => {
+    let areTripsEmpty = Object.keys(trips.trips).length === 0;
+    return (
         <section>
             <h1>WhereDidITravel?</h1>
             {auth.isAuthenticated ? (
                 <>
-                    {trips.trips ? (
+                    {!areTripsEmpty ? (
                         <>
                             <MapComponent trips={trips.trips}/>
                             <small>Zoom out to see all trips</small>
@@ -33,7 +29,5 @@ const mapStateToProps = state => ({
 });
   
 export default connect(
-    mapStateToProps, {
-        getTrips
-    }
+    mapStateToProps
 )(Landing);
