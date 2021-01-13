@@ -1,27 +1,19 @@
 import React, {useState} from 'react';
-import wditAPI from '../api/wdit';
+import { withRouter } from "react-router-dom";
+import {useDispatch} from 'react-redux';
 import ErrorMessage from './ErrorMessage';
 
-const TripForm = ({formTitle, buttonTitle, data, handleDelete}) => {
-    const [description, setDescription] = useState('');
-    const [location, setLocation] = useState('');
-    const [rating, setRating] = useState('');
+const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, onSubmit, history}) => {
+    const dispatch = useDispatch();
+    const [description, setDescription] = useState(data.description||'');
+    const [location, setLocation] = useState(data.location||'');
+    const [rating, setRating] = useState(data.rating||'');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if(!data){
-                await wditAPI.post('/api/trips', { description, location, rating });
-            } else {
-                await wditAPI.patch(`/api/trips/${data._id}`, { description, rating });
-            }
-            window.location.href = "/";
-        } catch (error) {
-            setErrorMessage(error);
-        }
-    }
-   
+   const doDelete = async () => {
+       await handleDelete(data._id);
+       history.push('/');
+   }
     const handleValidity = (e) => {
         e.target.setCustomValidity("");
         if(!e.target.validity.valid){
@@ -36,12 +28,21 @@ const TripForm = ({formTitle, buttonTitle, data, handleDelete}) => {
         <div>
             <h1>{formTitle || 'Add a trip'}</h1>
             <ErrorMessage message={errorMessage}/>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={async (e) => {
+                e.preventDefault();
+                if(data){
+                    await handleUpdate(data._id, {description, rating});
+                    history.push('/');
+                } else {
+                    await dispatch(onSubmit({description,location,rating}));
+                    history.push('/');
+                }
+            }}>
                 <input 
                     type="text"
                     name="description"
                     placeholder="Description" 
-                    value={data ? data.description : description} 
+                    value={description} 
                     onChange={(e) => setDescription(e.target.value) }
                     onInvalid={handleValidity}
                     onInput={handleInput}
@@ -51,7 +52,7 @@ const TripForm = ({formTitle, buttonTitle, data, handleDelete}) => {
                     type="text"
                     name="location"
                     placeholder="Location"
-                    value={data ? data.location : location}
+                    value={location}
                     disabled={data}
                     onChange={(e) => setLocation(e.target.value)}
                     onInvalid={handleValidity}
@@ -64,20 +65,14 @@ const TripForm = ({formTitle, buttonTitle, data, handleDelete}) => {
                     placeholder="Rating"
                     min="0"
                     max="10"
-                    value={data ? data.rating : rating}
+                    value={rating}
                     onChange={(e) => setRating(e.target.value)}
                 />
                 <button>{buttonTitle || 'Submit'}</button>
             </form>
-            {data ? (<button onClick={handleDelete}>Delete</button>) : null }
+            {data ? (<button onClick={()=>doDelete()}>Delete</button>) : null }
         </div>
     )
 }
 
-TripForm.defaultProps = {
-    formTitle: '',
-    buttonTitle: '',
-    data:''
-}
-
-export default TripForm;
+export default withRouter(TripForm);
