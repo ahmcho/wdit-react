@@ -1,9 +1,11 @@
 import React from 'react';
 import { Marker } from '@react-google-maps/api';
 
-const MarkerList = ({markers, onSelect}) => (
+const MarkerList = ({markers, onSelect}) => {
+  const trips = Object.values(markers);
+  return(
     <>
-        {Array.from(markers).map(trip => {
+        {trips.map(trip => {
             const position = {
               lng: trip.geometry.coordinates[0],
               lat: trip.geometry.coordinates[1]
@@ -23,6 +25,6 @@ const MarkerList = ({markers, onSelect}) => (
     </>
 )
 
-
+}
 
 export default MarkerList;
