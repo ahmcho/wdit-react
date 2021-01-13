@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { connect } from "react-redux";
 import {Redirect} from 'react-router-dom';
 import { logoutUser } from '../actions/auth';
+import { createTrip } from '../actions/trips';
 import TripForm from '../components/TripForm';
 
 const MyAccount = ({auth,logoutUser}) => {
@@ -25,6 +26,7 @@ const MyAccount = ({auth,logoutUser}) => {
                         <TripForm 
                             formTitle="Add a trip"
                             buttonTitle="Create"
+                            onSubmit={createTrip}
                         />
                         <button onClick={handleLogout}>Log out</button>
                     </div>
@@ -42,6 +44,6 @@ const mapStateToProps = state => ({
   
 export default connect(
     mapStateToProps,
-    { logoutUser }
+    { logoutUser, createTrip }
 )(MyAccount);
   
