@@ -1,46 +1,44 @@
-import React, {useEffect, useState} from 'react';
-import wditAPI from '../api/wdit';
+import React, {useState, useEffect} from 'react';
+import {connect} from 'react-redux';
+import {getTrips,deleteTrip, updateTrip} from '../actions/trips';
+
 import TripForm from '../components/TripForm';
 
-const Trip = ({match}) => {
+const Trip = ({auth,error, match,trips, getTrips, deleteTrip, updateTrip, history}) => {
     const { params: { tripId }} = match;
-    const [tripData, setTripData] = useState({});
+    
+    const [singleTrip, setSingleTrip] = useState(Object.values(trips).filter(trip => trip._id === tripId)[0]);
 
-    useEffect( () => {
-        const getTripInfo = async () => {
-            try {
-                const res = await wditAPI.get(`/api/trips/${tripId}`);
-                setTripData(res.data.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getTripInfo();
-    }, [tripId]);
-
-    const handleDelete = async (e) => {
-        e.preventDefault();
-        try {
-            await wditAPI.delete(`/api/trips/${tripData._id}`);
-            window.location.href = "/"
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    useEffect(() => {
+        setSingleTrip(Object.values(trips).filter(trip => trip._id === tripId)[0]);
+    },[auth.isAuthenticaded,trips, tripId, getTrips, history])
+    
     
     return(
-        <>
-            {tripData._id && (
+        <>  
+            {singleTrip ? (
                 <TripForm 
                     formTitle="Edit Your Trip"
                     buttonTitle="Update"
-                    data={tripData}
-                    handleDelete={handleDelete}    
+                    data={singleTrip}
+                    handleDelete={deleteTrip}
+                    handleUpdate={updateTrip}
                 />
+            ):(
+                <h1>Loading...</h1>
             )}
         </>
 
     )
 }
 
-export default Trip;
+const mapStateToProps = state => ({
+    auth: state.auth,
+    error: state.error,
+    trips: state.trips
+});
+  
+export default connect(
+    mapStateToProps,
+    { getTrips,deleteTrip,updateTrip}
+)(Trip);
