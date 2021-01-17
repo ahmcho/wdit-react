@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {getTrips,deleteTrip, updateTrip} from '../actions/trips';
 
+import UpdateIcon from '@material-ui/icons/Update';
+
 import TripForm from '../components/TripForm';
 
 const Trip = ({auth,error, match,trips, getTrips, deleteTrip, updateTrip, history}) => {
@@ -22,6 +24,7 @@ const Trip = ({auth,error, match,trips, getTrips, deleteTrip, updateTrip, histor
                     buttonTitle="Update"
                     data={singleTrip}
                     handleDelete={deleteTrip}
+                    startIcon={<UpdateIcon />}
                     handleUpdate={updateTrip}
                 />
             ):(
