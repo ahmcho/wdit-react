@@ -1,7 +1,33 @@
 import React from 'react';
+
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles((theme) => ({
+    typographyStyle: {
+        flexGrow: 1,
+        textAlign: "center",
+    },
+    link:{
+        justifyContent: "center",
+        textAlign: "center",
+    }
+}));
+
 const About = () => {
     return (
-        <p>Here is our about page</p>
+        <Container component="main" maxWidth="sm">
+            <Grid container>
+                <Typography variant="body1">
+                    WhereDidITravel is service that lets you to place add markers to your map. The markers represent countries that you visited or planning to visit.
+                    You can add ratings to your trip, which will be visible on the map as well. Currently, the map with all your trips is only available to you. 
+                </Typography>
+                {/* If you wish, you can actually share a public map with all your trips for anyone to see. */}
+            </Grid>
+        </Container>
     )
 }
 
