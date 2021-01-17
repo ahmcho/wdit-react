@@ -1,40 +1,41 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from "react-redux";
 import {Redirect} from 'react-router-dom';
-import { logoutUser } from '../actions/auth';
 import { createTrip } from '../actions/trips';
 import TripForm from '../components/TripForm';
 
-const MyAccount = ({auth,logoutUser}) => {
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
+
+const MyAccount = ({auth}) => {
     const [name, setName] = useState('');
     
     useEffect(() => {
         auth.isAuthenticated && ( setName(auth.user.name) )
     }, [auth]);
 
-    const handleLogout = (e) => {
-        e.preventDefault();
-        logoutUser();
-    }
 
     return (
-        <div>
+        <Container maxWidth="sm" spacing={3}>
             {auth.isAuthenticated 
                 ? (
-                    <div>
-                        <p>Welcome, {name}!</p>
+                    <>
+                        <Typography variant="h4" align="center">
+                            Welcome, {name}
+                        </Typography>
                         <TripForm 
                             formTitle="Add a trip"
                             buttonTitle="Create"
+                            startIcon={<AddIcon />}
                             onSubmit={createTrip}
                         />
-                        <button onClick={handleLogout}>Log out</button>
-                    </div>
+                    </>
                 ) : (
                     <Redirect to='/login' />
                 )
             }
-        </div>
+        </Container>
     )
 }
 
@@ -44,6 +45,6 @@ const mapStateToProps = state => ({
   
 export default connect(
     mapStateToProps,
-    { logoutUser, createTrip }
+    {createTrip }
 )(MyAccount);
   
