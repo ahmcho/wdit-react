@@ -1,4 +1,3 @@
-import './App.css';
 import Landing from './containers/Landing';
 import NavBar from './components/NavBar';
 import About from './containers/About';
@@ -12,6 +11,9 @@ import jwt_decode from "jwt-decode";
 import { setCurrentUser, logoutUser } from "./actions/auth";
 import {getTrips} from './actions/trips';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+import './App.css';
+import 'fontsource-roboto';
 
 
 if (localStorage.token) {
