@@ -1,11 +1,17 @@
 import React, { useState, memo, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { GoogleMap, useLoadScript, InfoWindow } from '@react-google-maps/api';
 
-import Locate from '../components/Locate';
-import MarkerList from '../components/MarkerList';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+
+import Locate from './Locate';
+import MarkerList from './MarkerList';
+import RatingBar from './RatingBar';
+
 import getCurrentLocation from '../utils/getCurrentLocation';
+
 import {libraries,mapContainerStyle,options}  from '../config/settings';
 
 let center;
@@ -57,8 +63,17 @@ const MapComponent = ({ trips }) => {
                 onCloseClick={() => setSelected({})}
               >
                 <>
-                  <Link to={`/trips/${selected._id}`}>{selected.description}</Link>
-                  <p>Rating: {selected.rating}</p>
+                  <Typography variant="subtitle1">
+                    <Link 
+                      underline="none"
+                      component={RouterLink}
+                      to={`/trips/${selected._id}`}>
+                      {selected.description}
+                    </Link>
+                  </Typography>
+                  <Typography variant="subtitle2" gutterBottom>
+                    <RatingBar data={selected.rating} />
+                  </Typography>
                 </>
               </InfoWindow>
             )
