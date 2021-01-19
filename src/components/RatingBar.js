@@ -3,7 +3,7 @@ import StarOutlineIcon from '@material-ui/icons/StarOutline';
 import StarIcon from '@material-ui/icons/Star';
 
 const RatingBar = ({data}) => {
-    if(data === 0){
+    if(data == '0'){
         return <StarOutlineIcon color="secondary" />;
     }
     let stars = [];
