@@ -4,8 +4,9 @@ import { connect } from "react-redux";
 import {getTrips} from '../actions/trips';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
 import MapComponent from '../components/MapComponent';
 
@@ -45,7 +46,7 @@ const Landing = ({auth, trips, error}) => {
                                 <Typography className={classes.typographyStyle} variant="h6">No trips found</Typography>
                             </Grid>
                             <Grid align="center" item xs={12}>
-                                <Link  variant="body2" component={RouterLink} to="/dashboard">{"Add a trip"}</Link>
+                                <Button component={RouterLink} to="/dashboard" color="primary"><AddIcon />{"Add a trip"}</Button>
                             </Grid>
                         </>
                     )}
