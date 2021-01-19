@@ -9,6 +9,7 @@ import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { connect } from "react-redux";
 import { logoutUser } from '../actions/auth';
 
@@ -84,7 +85,7 @@ const NavBar = ({auth, logoutUser }) => {
                 onClose={handleClose}
               >
                 <MenuItem key="1" component={RouterLink} to="/dashboard">My Account</MenuItem>
-                <MenuItem key="2" onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem key="2" onClick={handleLogout}><ExitToAppIcon/>Logout</MenuItem>
               </Menu>
             </div>
           )}
