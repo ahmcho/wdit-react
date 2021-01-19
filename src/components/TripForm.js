@@ -49,7 +49,7 @@ const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, 
     const dispatch = useDispatch();
     const [description, setDescription] = useState(data.description||'');
     const [location, setLocation] = useState(data.location||'');
-    const [rating, setRating] = useState(data.rating||'');
+    const [rating, setRating] = useState(data.rating|| 0);
     const [errorMessage, setErrorMessage] = useState('');
 
    const doDelete = async () => {
