@@ -1,4 +1,4 @@
-import { GET_TRIP, GET_TRIPS, UPDATE_TRIP, CREATE_TRIP, DELETE_TRIP } from "../actions/types";
+import { GET_TRIPS, UPDATE_TRIP, CREATE_TRIP, DELETE_TRIP, RESET } from "../actions/types";
 
 const initialState = [];
 
@@ -22,6 +22,8 @@ const trips = (state = initialState, action) => {
         ) : trip)
       case DELETE_TRIP:
         return Object.values(state).filter(trip => trip._id !== action.payload);
+      case RESET:
+        return initialState;
       default:
         return state;
     }
