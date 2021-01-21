@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import { withRouter, Redirect, Link as RouterLink } from "react-router-dom"
 
 import { loginUser } from "../actions/auth";
+import { startLoading, stopLoading } from "../actions/ui";
 import { clearErrors } from "../actions/error";
 
 import Avatar from '@material-ui/core/Avatar';
@@ -19,6 +20,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import Loader from 'react-loader-spinner'
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -42,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 //import AuthForm from '../components/AuthForm';
 
-const Login = ({ auth, error, loginUser, clearErrors }) => {
+const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoading }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -55,7 +59,9 @@ const Login = ({ auth, error, loginUser, clearErrors }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         const userData = { email, password };
-        loginUser(userData);
+        startLoading();
+        await loginUser(userData);
+        stopLoading();
     }
 
     const handleClickShowPassword = () => {
@@ -125,15 +131,28 @@ const Login = ({ auth, error, loginUser, clearErrors }) => {
                                         )
                                     }}
                                 />
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.submit}
-                                > 
-                                    Sign In
-                                </Button>
+                                {ui.loading ? (
+                                    <Grid container>
+                                        <Grid item xs align="center">
+                                            <Loader
+                                                type="Rings"
+                                                color="#3f51b5"
+                                                height={100}
+                                                width={100}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                ) : (
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.submit}
+                                    > 
+                                        Sign In
+                                    </Button>
+                                )}
                                 <Grid container>
                                     {/* <Grid item xs>
                                         <Link href="#" variant="body2">
@@ -157,10 +176,11 @@ const Login = ({ auth, error, loginUser, clearErrors }) => {
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    error: state.error
+    error: state.error,
+    ui: state.ui
   });
   
   export default connect(
     mapStateToProps,
-    { loginUser, clearErrors }
+    { loginUser, clearErrors, startLoading, stopLoading }
   )(withRouter(Login));

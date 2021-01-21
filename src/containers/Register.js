@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {Link as RouterLink, withRouter} from 'react-router-dom';
 import { registerUser } from "../actions/auth";
+import { startLoading, stopLoading } from '../actions/ui';
 import { clearErrors } from "../actions/error";
 import ErrorMessage from '../components/ErrorMessage';
 
@@ -19,6 +20,8 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import Loader from 'react-loader-spinner'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -40,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Register = ({auth, error, registerUser, clearErrors, history}) => {
+const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, clearErrors, history}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -59,7 +62,9 @@ const Register = ({auth, error, registerUser, clearErrors, history}) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         const userData = { email, password, name,age };
-        registerUser(userData, history);
+        startLoading();
+        await registerUser(userData, history);
+        stopLoading();
     }
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -159,15 +164,28 @@ const Register = ({auth, error, registerUser, clearErrors, history}) => {
                     />
                     </Grid>
                 </Grid>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                >
-                    Register
-                </Button>
+                {ui.loading ? (
+                    <Grid container>
+                        <Grid item xs align="center">
+                        <Loader
+                        type="Rings"
+                        color="#3f51b5"
+                        height={100}
+                        width={100}
+                    />
+                        </Grid>
+                    </Grid>
+                ) : (
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                        Register
+                    </Button>                
+                )}
                 <Grid container justify="flex-end">
                     <Grid item>
                         <Link component={RouterLink} to="/login" variant="body2">
@@ -183,10 +201,11 @@ const Register = ({auth, error, registerUser, clearErrors, history}) => {
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    error: state.error
+    error: state.error,
+    ui: state.ui
 });
   
 export default withRouter(connect(
     mapStateToProps,
-    { registerUser, clearErrors }
+    { registerUser, startLoading, stopLoading, clearErrors }
 )(Register));
