@@ -2,22 +2,27 @@ import React, {useEffect, useState} from 'react';
 import { connect } from "react-redux";
 import {Redirect} from 'react-router-dom';
 import { createTrip } from '../actions/trips';
+import { logoutUser } from '../actions/auth';
 import TripForm from '../components/TripForm';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 
-const MyAccount = ({auth}) => {
+const MyAccount = ({auth, error, logoutUser}) => {
     const [name, setName] = useState('');
     
     useEffect(() => {
+        error.toString().includes('Unauthorized') && logoutUser();
         auth.isAuthenticated && ( setName(auth.user.name) )
-    }, [auth]);
+    }, [auth, error,logoutUser]);
 
 
     return (
         <Container maxWidth="sm" spacing={3}>
+            {error.toString().includes('Unauthorized') && (
+                <Redirect to="/login"/>
+            )}
             {auth.isAuthenticated 
                 ? (
                     <>
@@ -40,11 +45,12 @@ const MyAccount = ({auth}) => {
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    error: state.error
 });
   
 export default connect(
     mapStateToProps,
-    {createTrip }
+    {createTrip, logoutUser }
 )(MyAccount);
   
