@@ -9,18 +9,25 @@ import { Provider } from 'react-redux';
 import store from './store';
 import jwt_decode from "jwt-decode";
 import { setCurrentUser, logoutUser } from "./actions/auth";
+import { startLoading, stopLoading } from './actions/ui';
 import {getTrips} from './actions/trips';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import './App.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import 'fontsource-roboto';
 
+const fetchTrips = async () => {
+  store.dispatch(startLoading());
+  await store.dispatch(getTrips())
+  store.dispatch(stopLoading());
+} 
 
 if (localStorage.token) {
   const token = localStorage.token;
   const decoded = jwt_decode(token);
   store.dispatch(setCurrentUser(decoded));
-  store.dispatch(getTrips());
+  fetchTrips();
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
     store.dispatch(logoutUser());
