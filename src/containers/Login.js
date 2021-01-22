@@ -154,11 +154,11 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                                     </Button>
                                 )}
                                 <Grid container>
-                                    {/* <Grid item xs>
-                                        <Link href="#" variant="body2">
+                                    <Grid item xs>
+                                        <Link variant="body2" component={RouterLink} to="/forgot">
                                             Forgot password?
                                         </Link>
-                                    </Grid> */}
+                                    </Grid>
                                     <Grid item>
                                         <Link  variant="body2" component={RouterLink} to="/register">
                                             {"Don't have an account? Sign Up"}
