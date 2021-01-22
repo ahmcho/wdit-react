@@ -5,6 +5,9 @@ import MyAccount from './containers/MyAccount';
 import Login from './containers/Login';
 import Trip from './containers/Trip';
 import Register from './containers/Register';
+import NotFound from './containers/NotFound';
+import Forgot from './containers/Forgot';
+import Reset from './containers/Reset';
 import { Provider } from 'react-redux';
 import store from './store';
 import jwt_decode from "jwt-decode";
@@ -34,6 +37,8 @@ if (localStorage.token) {
     window.location.href = "/login";
   }
 }
+
+
 const  App = () => {
   return (
     <Provider store={store}>
@@ -45,7 +50,10 @@ const  App = () => {
             <Route path="/dashboard" component={MyAccount} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
+            <Route path="/forgot" component={Forgot} />
             <Route path="/trips/:tripId" component={Trip} />
+            <Route path="/reset/:token" component={Reset} />
+            <Route component={NotFound} />
         </Switch>
       </Router>
     </Provider>
