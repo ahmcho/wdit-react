@@ -35,9 +35,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 const NavBar = ({auth, logoutUser }) => {
-  
-  const [anchorEl, setAnchorEl] = React.useState();
   const divRef = useRef();
+  
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const classes = useStyles();
 
   const handleClick = (event) => {
@@ -47,6 +47,7 @@ const NavBar = ({auth, logoutUser }) => {
   const handleLogout = (e) => {
     e.preventDefault();
     logoutUser();
+    setAnchorEl(null);
   }
 
   const handleClose = () => {
@@ -67,28 +68,39 @@ const NavBar = ({auth, logoutUser }) => {
                 </Link>
             </Typography>
             <Button component={RouterLink} color="inherit" to="/about">About</Button>
-            {!auth.isAuthenticated  ? (
-            <>
-              <Button component={RouterLink} color="inherit" to="/register">Register</Button>
-              <Button component={RouterLink} color="inherit" to="/login">Login</Button>
-            </>
-          ) : (
             <div ref={divRef}>
-              <Button color="inherit" startIcon={<AccountCircleIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                Profile
-              </Button>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem key="1" component={RouterLink} to="/dashboard">My Account</MenuItem>
-                <MenuItem key="2" onClick={handleLogout}><ExitToAppIcon/>Logout</MenuItem>
-              </Menu>
+            {!auth.isAuthenticated  ? (
+              <>
+                <Button component={RouterLink} color="inherit" to="/register">Register</Button>
+                <Button component={RouterLink} color="inherit" to="/login">Login</Button>
+              </>
+            ) : (
+              <>
+                <Button color="inherit" startIcon={<AccountCircleIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                  Profile
+                </Button>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={divRef.current}
+                  getContentAnchorEl={null}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center"
+                  }}
+                  onClose={handleClose}
+                >
+                  <MenuItem key="1" component={RouterLink} to="/dashboard">My Account</MenuItem>
+                  <MenuItem key="2" onClick={handleLogout}><ExitToAppIcon/>Logout</MenuItem>
+                </Menu>
+              </>
+            )}
             </div>
-          )}
           </Toolbar>
         </AppBar>
       </>
