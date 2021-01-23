@@ -15,7 +15,7 @@ import { setCurrentUser, logoutUser } from "./actions/auth";
 import { startLoading, stopLoading } from './actions/ui';
 import {getTrips} from './actions/trips';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
+import { SnackbarProvider } from 'notistack';
 import './App.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import 'fontsource-roboto';
@@ -41,6 +41,7 @@ if (localStorage.token) {
 
 const  App = () => {
   return (
+    <SnackbarProvider>
     <Provider store={store}>
       <Router>
         <NavBar />
@@ -57,6 +58,7 @@ const  App = () => {
         </Switch>
       </Router>
     </Provider>
+    </SnackbarProvider>
   );
 }
 
