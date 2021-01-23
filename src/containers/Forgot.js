@@ -1,4 +1,6 @@
 import {useState} from 'react';
+import wditAPI from '../api/wdit';
+//Material UI components
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,10 +10,17 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Loader from 'react-loader-spinner';
+import { useSnackbar } from 'notistack';
 
-import Loader from 'react-loader-spinner'
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        '& > * + *': {
+          marginTop: theme.spacing(2),
+        },
+    },
     paper: {
       marginTop: theme.spacing(8),
       display: 'flex',
@@ -23,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.secondary.main,
     },
     form: {
-      width: '100%', // Fix IE 11 issue.
+      width: '100%', 
       marginTop: theme.spacing(1),
     },
     submit: {
@@ -34,72 +43,105 @@ const useStyles = makeStyles((theme) => ({
 const Forgot = ({history}) => {
     const [email, setEmail] = useState('');
     const [showLoader, setShowloader] = useState(false);
+    const [wrongEmail, setWrongEmail] = useState('');
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const key = `info-${Math.floor(Math.random()*1000)}`;
+    
     const classes = useStyles();
+    
 
-    const onSubmit = (e) => { 
+    const onSubmit = async (e) => { 
         e.preventDefault();
+        enqueueSnackbar('You will receive an email, if your entry matches our records', {
+            key, 
+            variant: 'info',
+            transitionDuration: 400,
+            anchorOrigin: {
+              vertical: 'bottom', 
+              horizontal: 'center'
+            }
+        });
         setShowloader(!showLoader);
-        setTimeout(() => {
+        try {
+            await wditAPI.post('/api/users/forgot', {email});
+            setEmail('');
+            enqueueSnackbar('Email sent succesfully', {
+                variant: 'success',
+                transitionDuration: 400,
+                anchorOrigin: {
+                  vertical: 'bottom', 
+                  horizontal: 'center'
+                }
+            });
+        } catch (error) {
+            setWrongEmail(error);
+            console.clear();
+            enqueueSnackbar(wrongEmail, { 
+                variant: 'error',
+                autoHideDuration: 2000,
+                transitionDuration: 400,
+                anchorOrigin: {
+                  vertical: 'bottom', 
+                  horizontal: 'center'
+                }
+            });
+            closeSnackbar(key);
             setShowloader(false);
-            history.push('/reset/sometoken');
-        }, 2000);
+        }
     }
 
     return(
         <Container component="main" maxWidth="xs">
-                        <CssBaseline />
-                        <div className={classes.paper}>
-                            <Avatar className={classes.avatar}>
-                                <LockOpenIcon />
-                            </Avatar>
-                            <Typography component="h1" variant="h5">
-                                Forgot password?
-                            </Typography>
-                            {/* {error && (
-                                <Typography component="h1" color="secondary" variant="h5">{Object.values(error)}</Typography>
-                            )} */}
-                            <form className={classes.form} onSubmit={onSubmit}>
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    id="email"
-                                    type="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    placeholder="Enter email you want to reset"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    fullWidth
-                                    required
-                                    autoFocus
+            <CssBaseline />
+            <div className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOpenIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Forgot password?
+                </Typography>
+                <form className={classes.form} onSubmit={onSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        id="email"
+                        type="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        placeholder="Enter email you want to reset"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        fullWidth
+                        required
+                        autoFocus
+                    />
+                    {showLoader ? (
+                        <Grid container>
+                            <Grid item xs align="center">
+                                <Loader
+                                    type="Rings"
+                                    color="#3f51b5"
+                                    height={100}
+                                    width={100}
                                 />
-                                {showLoader ? (
-                                    <Grid container>
-                                        <Grid item xs align="center">
-                                            <Loader
-                                                type="Rings"
-                                                color="#3f51b5"
-                                                height={100}
-                                                width={100}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                ): (
-                                    <Button
-                                        type="submit"
-                                        fullWidth
-                                        height={60}
-                                        variant="contained"
-                                        color="primary"
-                                        className={classes.submit}
-                                    > 
-                                        Submit    
-                                    </Button>
-                                )}
-                            </form>
-                        </div>
-                    </Container> 
+                            </Grid>
+                        </Grid>
+                    ): (
+                        <Button
+                            type="submit"
+                            fullWidth
+                            height={60}
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        > 
+                            Submit    
+                        </Button>
+                    )}
+                </form>
+            </div>
+        </Container> 
     )
 }
 
