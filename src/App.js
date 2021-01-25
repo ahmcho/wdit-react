@@ -41,7 +41,7 @@ if (localStorage.token) {
 
 const  App = () => {
   return (
-    <SnackbarProvider>
+    <SnackbarProvider preventDuplicate maxSnack={1}>
     <Provider store={store}>
       <Router>
         <NavBar />
