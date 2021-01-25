@@ -43,19 +43,19 @@ const useStyles = makeStyles((theme) => ({
 const Forgot = ({history}) => {
     const [email, setEmail] = useState('');
     const [showLoader, setShowloader] = useState(false);
-    const [wrongEmail, setWrongEmail] = useState('');
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    const key = `info-${Math.floor(Math.random()*1000)}`;
     
     const classes = useStyles();
     
 
     const onSubmit = async (e) => { 
         e.preventDefault();
-        enqueueSnackbar('You will receive an email, if your entry matches our records', {
-            key, 
+        const key = enqueueSnackbar('You will receive an email, if your entry matches our records', {
             variant: 'info',
             transitionDuration: 400,
+            onClick: () => {
+                closeSnackbar(key);
+            },
             anchorOrigin: {
               vertical: 'bottom', 
               horizontal: 'center'
@@ -63,29 +63,34 @@ const Forgot = ({history}) => {
         });
         setShowloader(!showLoader);
         try {
-            await wditAPI.post('/api/users/forgot', {email});
+            const response = await wditAPI.post('/api/users/forgot', {email});
             setEmail('');
-            enqueueSnackbar('Email sent succesfully', {
+            enqueueSnackbar(response.data.message, {
                 variant: 'success',
                 transitionDuration: 400,
+                preventDuplicate: true,
+                onClick: () => {
+                    closeSnackbar(key);
+                },
                 anchorOrigin: {
                   vertical: 'bottom', 
                   horizontal: 'center'
                 }
             });
+            setShowloader(false);
         } catch (error) {
-            setWrongEmail(error);
-            console.clear();
-            enqueueSnackbar(wrongEmail, { 
-                variant: 'error',
-                autoHideDuration: 2000,
-                transitionDuration: 400,
-                anchorOrigin: {
-                  vertical: 'bottom', 
-                  horizontal: 'center'
-                }
-            });
-            closeSnackbar(key);
+            setTimeout(() => {
+                enqueueSnackbar(error, { 
+                    variant: 'error',
+                    autoHideDuration: 2000,
+                    transitionDuration: 400,
+                    anchorOrigin: {
+                      vertical: 'bottom', 
+                      horizontal: 'center'
+                    }
+                });
+            }, 1000)
+            
             setShowloader(false);
         }
     }
