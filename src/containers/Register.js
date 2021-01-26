@@ -61,6 +61,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
     
     const onSubmit = async (e) => {
         e.preventDefault();
+        clearErrors();
         const userData = { email, password, name,age };
         startLoading();
         await registerUser(userData, history);
@@ -111,7 +112,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                             type="number"
                             id="lastName"
                             label="Age"
-                            error={error !== {} ? error.toString().includes('age') : false }
+                            error={error !== '' ? error.includes('age') : false }
                             name="lastName"
                             autoComplete="lname"
                             value={age}
@@ -128,7 +129,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                             label="Email Address"
                             name="email"
                             autoComplete="email"
-                            error={error !== {} ? error.toString().includes('email'): false}
+                            error={error !== '' ? error.includes('email'): false}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             fullWidth
@@ -143,6 +144,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                         fullWidth
                         name="password"
                         label="Password"
+                        error={error !== '' ? error.includes('password'): false}
                         type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}

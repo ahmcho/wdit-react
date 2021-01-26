@@ -20,7 +20,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import Loader from 'react-loader-spinner'
 
 
@@ -45,12 +46,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //import AuthForm from '../components/AuthForm';
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoading }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [open, setOpen] = React.useState(false);
+
     const classes = useStyles();
+
+    useEffect(() => {
+        if(error.length !== 0){
+            setOpen(true);
+        }
+    },[error]);
 
     useEffect(() => {
         clearErrors();
@@ -68,6 +80,14 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
         setShowPassword(!showPassword);
     };
     
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+    };
+
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
@@ -87,8 +107,12 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                             <Typography component="h1" variant="h5">
                                 Sign in
                             </Typography>
-                            {error && (
-                                <Typography component="h1" color="secondary" variant="h5">{Object.values(error)}</Typography>
+                            {error.length !== 0 && (
+                                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                                    <Alert onClose={handleClose} severity="error">
+                                        {error}
+                                    </Alert>
+                                </Snackbar>
                             )}
                             <form className={classes.form} onSubmit={onSubmit}>
                                 <TextField
@@ -101,6 +125,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                                     autoComplete="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    error={error.length !== 0}
                                     fullWidth
                                     required
                                     autoFocus
@@ -113,6 +138,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                                     name="password"
                                     label="Password"
                                     type={showPassword ? 'text' : 'password'}
+                                    error={error.length !== 0}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     id="password"
