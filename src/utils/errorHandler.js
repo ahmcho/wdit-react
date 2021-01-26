@@ -13,7 +13,7 @@ const errorHandler = (error) => {
                     message += 'Password is not secure! ';
                     break;
                 case error.includes('shorter'):
-                    message += 'Password is short!';
+                    message += 'Password is short! ';
                     break;
                 default:
                     message += 'Password is required! ';
