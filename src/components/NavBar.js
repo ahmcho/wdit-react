@@ -77,7 +77,7 @@ const NavBar = ({auth, logoutUser }) => {
             ) : (
               <>
                 <Button color="inherit" startIcon={<AccountCircleIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                  Profile
+                  {auth.user.name}
                 </Button>
                 <Menu
                   id="simple-menu"
@@ -95,7 +95,7 @@ const NavBar = ({auth, logoutUser }) => {
                   }}
                   onClose={handleClose}
                 >
-                  <MenuItem key="1" component={RouterLink} to="/dashboard">My Account</MenuItem>
+                  <MenuItem key="1" component={RouterLink} to="/dashboard">Dashboard</MenuItem>
                   <MenuItem key="2" onClick={handleLogout}><ExitToAppIcon/>Logout</MenuItem>
                 </Menu>
               </>
