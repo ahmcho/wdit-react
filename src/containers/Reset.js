@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import wditAPI from '../api/wdit';
+import errorHandler from '../utils/errorHandler';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -89,7 +90,7 @@ const Reset = ({ match, history }) => {
                 setPassword('');
                 setConfirmPassword('');
             } catch (error) {
-                enqueueSnackbar(error, { 
+                enqueueSnackbar(errorHandler(error), { 
                     variant: 'error',
                     autoHideDuration: 2000,
                     transitionDuration: 600,
