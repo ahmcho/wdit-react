@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {getTrips,deleteTrip, updateTrip} from '../actions/trips';
-
 import UpdateIcon from '@material-ui/icons/Update';
-
+import Grid from '@material-ui/core/Grid';
+import Loader from 'react-loader-spinner'
 import TripForm from '../components/TripForm';
 
 const Trip = ({auth,error, match,trips, getTrips, deleteTrip, updateTrip, history}) => {
@@ -28,7 +28,16 @@ const Trip = ({auth,error, match,trips, getTrips, deleteTrip, updateTrip, histor
                     handleUpdate={updateTrip}
                 />
             ):(
-                <h1>Loading...</h1>
+                <Grid container>
+                    <Grid item xs align="center">
+                        <Loader
+                            type="Rings"
+                            color="#3f51b5"
+                            height={100}
+                            width={100}
+                        />
+                    </Grid>
+                </Grid>
             )}
         </>
 
@@ -38,10 +47,11 @@ const Trip = ({auth,error, match,trips, getTrips, deleteTrip, updateTrip, histor
 const mapStateToProps = state => ({
     auth: state.auth,
     error: state.error,
+    ui: state.ui,
     trips: state.trips
 });
   
 export default connect(
     mapStateToProps,
-    { getTrips,deleteTrip,updateTrip}
+    { getTrips,deleteTrip,updateTrip }
 )(Trip);
