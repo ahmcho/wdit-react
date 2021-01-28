@@ -10,7 +10,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+//Icons
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import SettingsIcon from '@material-ui/icons/Settings';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
   
@@ -41,15 +46,10 @@ const MyAccount = ({auth, error, logoutUser}) => {
                 ? (
                     <Grid container justify="center" alignItems="center"  spacing={3}>
                         <Grid item xs={12}>
-                            <Typography  variant="h4" align="center">
-                                Welcome to dashboard
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
                             <AppBar position="static">
                                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-                                <Tab label="Dashboard" {...a11yProps(0)} />
-                                <Tab label="Settings" {...a11yProps(2)} />
+                                <Tab label="Dashboard" {...a11yProps(0)} icon={<DashboardIcon />} />
+                                <Tab label="Settings" {...a11yProps(2)} icon={<SettingsIcon />} />
                                 </Tabs>
                             </AppBar>
                             <TabPanel value={value} index={0}>
@@ -61,7 +61,27 @@ const MyAccount = ({auth, error, logoutUser}) => {
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={1}>
-                                Some settings placeholder
+                                <Grid container justify="center" alignItems="center"  spacing={3}>
+                                    <Grid item xs={12}>
+                                        <Button
+                                            height={60}
+                                            variant="contained"
+                                            color="primary"
+                                            style={{ margin: "1ch"}}
+                                            endIcon={<ExitToAppIcon />}
+                                        > 
+                                            Logout    
+                                        </Button>
+                                        <Button
+                                            height={60}
+                                            variant="contained"
+                                            color="primary"
+                                            endIcon={<DeleteForeverIcon />}
+                                        > 
+                                            Delete your account    
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                             </TabPanel>
                         </Grid>
                     </Grid>
