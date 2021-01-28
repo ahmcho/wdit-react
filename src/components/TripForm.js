@@ -66,6 +66,15 @@ const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, 
         e.target.setCustomValidity("");
     }
     
+    const onDescriptionChange = (e) => setDescription(e.target.value);
+    const onRatingChange = (e) => setRating(e.target.value);
+    const onLocationChange = (e) => setLocation(e.target.value);
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        data ? await handleUpdate(data._id, {description, rating}) : await dispatch(onSubmit({description,location,rating}));
+        history.push('/');
+    }
     return(
         <Container maxWidth="sm" spacing={3}>
          <div className={classes.paper}>
@@ -86,23 +95,14 @@ const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, 
                         </Paper>
                     </Grid>
                 )}
-                <form className={classes.form} onSubmit={async (e) => {
-                    e.preventDefault();
-                    if(data){
-                        await handleUpdate(data._id, {description, rating});
-                        history.push('/');
-                    } else {
-                        await dispatch(onSubmit({description,location,rating}));
-                        history.push('/');
-                    }
-                }}>
+                <form className={classes.form} onSubmit={handleSubmit}>
                     <Grid item xs={8}>
                         <TextField 
                             error={errorMessage.length!==0}
                             name="description"
                             label="Description" 
                             value={description} 
-                            onChange={(e) => setDescription(e.target.value) }
+                            onChange={onDescriptionChange}
                             onInvalid={handleValidity}
                             onInput={handleInput}
                             className={classes.field}
@@ -117,7 +117,7 @@ const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, 
                             fullWidth
                             inputProps={{ min: "0", max: "10" }}
                             value={rating==0?"0":rating}
-                            onChange={(e) => setRating(e.target.value)}
+                            onChange={onRatingChange}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -129,7 +129,7 @@ const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, 
                             InputProps={{
                                 readOnly: !!data,
                             }}
-                            onChange={(e) => setLocation(e.target.value)}
+                            onChange={onLocationChange}
                             onInvalid={handleValidity}
                             onInput={handleInput}
                             helperText={data ? "You can not edit location" : null}
@@ -138,7 +138,7 @@ const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, 
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button type="submit" className={classes.submit} startIcon={startIcon} variant="contained" color="primary">{buttonTitle || 'Submit'}</Button>
+                        <Button type="submit" fullWidth={!data} className={classes.submit} startIcon={startIcon} variant="contained" color="primary">{buttonTitle || 'Submit'}</Button>
                         {data ? (
                             <Button variant="contained" color="secondary" startIcon={<DeleteIcon />} onClick={()=>doDelete()}>
                                 Delete
