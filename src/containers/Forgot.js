@@ -1,5 +1,7 @@
 import {useState} from 'react';
 import wditAPI from '../api/wdit';
+import {connect} from 'react-redux';
+import { Redirect } from "react-router-dom";
 //Material UI components
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -40,13 +42,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Forgot = ({history}) => {
+const Forgot = ({auth}) => {
     const [email, setEmail] = useState('');
     const [showLoader, setShowloader] = useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     
     const classes = useStyles();
     
+    const onEmailChange = (e) => setEmail(e.target.value);
 
     const onSubmit = async (e) => { 
         e.preventDefault();
@@ -97,6 +100,9 @@ const Forgot = ({history}) => {
 
     return(
         <Container component="main" maxWidth="xs">
+            {auth.isAuthenticated && (
+                <Redirect to='/dashboard' />
+            )}
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -116,7 +122,7 @@ const Forgot = ({history}) => {
                         autoComplete="email"
                         placeholder="Enter email you want to reset"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={onEmailChange}
                         fullWidth
                         required
                         autoFocus
@@ -150,4 +156,10 @@ const Forgot = ({history}) => {
     )
 }
 
-export default Forgot;
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+  
+export default connect(
+    mapStateToProps
+)(Forgot);
