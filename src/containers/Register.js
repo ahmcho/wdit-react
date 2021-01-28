@@ -59,6 +59,11 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
         }
     }, [auth,clearErrors,history]);
     
+    const onNameChange = (e) => setName(e.target.value);
+    const onAgeChange = (e) => setAge(e.target.value);
+    const onEmailChange = (e) => setEmail(e.target.value);
+    const onPasswordChange = (e) => setPassword(e.target.value);
+
     const onSubmit = async (e) => {
         e.preventDefault();
         clearErrors();
@@ -100,7 +105,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                             id="firstName"
                             label="Name"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={onNameChange}
                             autoFocus
                             fullWidth
                             required
@@ -116,7 +121,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                             name="lastName"
                             autoComplete="lname"
                             value={age}
-                            onChange={(e) => setAge(e.target.value)}
+                            onChange={onAgeChange}
                             fullWidth
                             required
                         />
@@ -131,7 +136,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                             autoComplete="email"
                             error={error !== '' ? error.includes('email'): false}
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={onEmailChange}
                             fullWidth
                             required
                         />
@@ -147,7 +152,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                         error={error !== '' ? error.includes('password'): false}
                         type={showPassword ? 'text' : 'password'}
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={onPasswordChange}
                         id="password"
                         autoComplete="current-password"
                         InputProps={{ 
