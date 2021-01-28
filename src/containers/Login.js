@@ -68,6 +68,9 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
         clearErrors();
     }, [auth, clearErrors]);
     
+    const onEmailChange = (e) => setEmail(e.target.value);
+    const onPasswordChange = (e) => setPassword(e.target.value);
+
     const onSubmit = async (e) => {
         e.preventDefault();
         const userData = { email, password };
@@ -124,7 +127,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                                     name="email"
                                     autoComplete="email"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={onEmailChange}
                                     error={error.length !== 0}
                                     fullWidth
                                     required
@@ -140,7 +143,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                                     type={showPassword ? 'text' : 'password'}
                                     error={error.length !== 0}
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={onPasswordChange}
                                     id="password"
                                     autoComplete="current-password"
                                     InputProps={{ 
