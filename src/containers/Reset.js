@@ -1,17 +1,15 @@
 import {useState} from 'react';
+import {connect} from 'react-redux';
+import { withRouter, Redirect } from "react-router-dom";
 import wditAPI from '../api/wdit';
 import errorHandler from '../utils/errorHandler';
+import SuperPasswordField from '../components/SuperPasswordField';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { useSnackbar } from 'notistack';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -37,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Reset = ({ match, history }) => {
+const Reset = ({ match, history,auth }) => {
     const { params: { token }} = match;
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -49,6 +47,9 @@ const Reset = ({ match, history }) => {
 
     const classes = useStyles();
     
+    const onPasswordChange = (e) => setPassword(e.target.value.replace(/\s/g,''));
+    const onConfirmPasswordChange = (e) => setConfirmPassword(e.target.value.replace(/\s/g,''));
+
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -56,10 +57,6 @@ const Reset = ({ match, history }) => {
     const handleClickShowConfirmPassword = () => {
         setShowConfirmPassword(!showConfirmPassword);
     }
-    
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
     
     const onSubmit = async (e) => { 
         e.preventDefault();
@@ -117,6 +114,9 @@ const Reset = ({ match, history }) => {
 
     return(
         <Container component="main" maxWidth="xs">
+            {auth.isAuthenticated && (
+                <Redirect to='/dashboard' />
+            )}
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -126,60 +126,28 @@ const Reset = ({ match, history }) => {
                     Reset Your Password
                 </Typography>
                 <form className={classes.form} onSubmit={onSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        id="password"
-                        type={showPassword ? 'text' : 'password'}
-                        label="Password"
-                        name="password"
+                    <SuperPasswordField 
+                        handleClickShowPassword={handleClickShowPassword}
+                        value={password}
+                        onChange={onPasswordChange}
+                        showPassword={showPassword}
                         error={!matchPasswords && true}
                         placeholder="Enter your new password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value.replace(/\s/g,''))}
-                        InputProps={{ 
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    >
-                                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
-                        fullWidth
-                        required
-                        autoFocus
+                        name="password"
+                        id="password"
+                        label="Password"
                     />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
+                    <SuperPasswordField 
+                        handleClickShowPassword={handleClickShowConfirmPassword}
                         id="confirmPassword"
-                        type={showConfirmPassword ? 'text' : 'password'}
                         label="Confirm password"
-                        error={!matchPasswords && true}
                         name="confirm-password"
                         placeholder="Confirm the password"
+                        showPassword={showConfirmPassword}
+                        password={confirmPassword}
+                        onChange={onConfirmPasswordChange}
+                        error={!matchPasswords && true}
                         value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value.replace(/\s/g,''))}
-                        InputProps={{ 
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowConfirmPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    >
-                                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
-                        fullWidth
-                        required
                     />
                     {showLoader ? (
                         <Grid container>
@@ -210,4 +178,10 @@ const Reset = ({ match, history }) => {
     )
 }
 
-export default Reset;
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+  
+export default connect(
+    mapStateToProps
+)(withRouter(Reset));
