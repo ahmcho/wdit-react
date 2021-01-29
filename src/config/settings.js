@@ -1,4 +1,4 @@
-import styles from './styles';
+import mapStyles from './mapStyles';
 
 export const libraries = ["places"];
 
@@ -13,7 +13,7 @@ export const center = {
 };
 
 export const options={
-    styles,
+    styles: mapStyles,
     disableDefaultUI: true,
     zoomControl: true
 };
