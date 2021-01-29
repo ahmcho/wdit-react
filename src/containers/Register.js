@@ -5,7 +5,7 @@ import { registerUser } from "../actions/auth";
 import { startLoading, stopLoading } from '../actions/ui';
 import { clearErrors } from "../actions/error";
 import ErrorMessage from '../components/ErrorMessage';
-
+import useStyles from '../config/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,30 +18,11 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import Loader from 'react-loader-spinner'
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%',
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-}));
+
 
 const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, clearErrors, history}) => {
     const [email, setEmail] = useState('');
@@ -83,7 +64,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
     return(
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <div className={classes.paper}>
+            <div className={classes.forgotPaper}>
                 <Avatar className={classes.avatar}>
                     <PersonAddIcon />
                 </Avatar>
@@ -95,7 +76,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                         <ErrorMessage message={error}/>
                     </Typography>
                 )}
-                <form className={classes.form} onSubmit={onSubmit}>
+                <form className={classes.authForm} onSubmit={onSubmit}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -188,7 +169,7 @@ const Register = ({auth, error, registerUser, ui, startLoading, stopLoading, cle
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}
+                        className={classes.authSubmit}
                     >
                         Register
                     </Button>                

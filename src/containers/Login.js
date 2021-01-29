@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
 import { withRouter, Redirect, Link as RouterLink } from "react-router-dom"
-
 import { loginUser } from "../actions/auth";
 import { startLoading, stopLoading } from "../actions/ui";
 import { clearErrors } from "../actions/error";
-
+import useStyles from '../config/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,32 +17,10 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Loader from 'react-loader-spinner'
-
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-}));
 
 //import AuthForm from '../components/AuthForm';
 const Alert = (props) => {
@@ -103,7 +80,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                 <>
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
-                        <div className={classes.paper}>
+                        <div className={classes.loginPaper}>
                             <Avatar className={classes.avatar}>
                                 <LockOutlinedIcon />
                             </Avatar>
@@ -117,7 +94,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                                     </Alert>
                                 </Snackbar>
                             )}
-                            <form className={classes.form} onSubmit={onSubmit}>
+                            <form className={classes.authForm} onSubmit={onSubmit}>
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
@@ -177,7 +154,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
                                         fullWidth
                                         variant="contained"
                                         color="primary"
-                                        className={classes.submit}
+                                        className={classes.authSubmit}
                                     > 
                                         Sign In
                                     </Button>

@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import { withRouter } from "react-router-dom";
 import {useDispatch} from 'react-redux';
 import ErrorMessage from './ErrorMessage';
-
-import { makeStyles } from '@material-ui/core/styles';
+import useStyles from '../config/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -13,36 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      marginBottom: '1em',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      color: theme.palette.text.secondary,
-    },
-    form: {
-        width: '100%',
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: theme.spacing(3),
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-        },
-    },
-    field:{
-        width: '90%',
-    },
-    submit:{
-       margin: "1ch"
-    }
-}));
+
 
 const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, onSubmit, history, startIcon}) => {
     const classes = useStyles();

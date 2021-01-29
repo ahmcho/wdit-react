@@ -4,6 +4,7 @@ import { withRouter, Redirect } from "react-router-dom";
 import wditAPI from '../api/wdit';
 import errorHandler from '../utils/errorHandler';
 import SuperPasswordField from '../components/SuperPasswordField';
+import useStyles from '../config/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,29 +12,9 @@ import Grid from '@material-ui/core/Grid';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Loader from 'react-loader-spinner';
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%',
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-}));
 
 const Reset = ({ match, history,auth }) => {
     const { params: { token }} = match;
@@ -118,14 +99,14 @@ const Reset = ({ match, history,auth }) => {
                 <Redirect to='/dashboard' />
             )}
             <CssBaseline />
-            <div className={classes.paper}>
+            <div className={classes.authPaper}>
                 <Avatar className={classes.avatar}>
                     <RotateLeftIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Reset Your Password
                 </Typography>
-                <form className={classes.form} onSubmit={onSubmit}>
+                <form className={classes.authForm} onSubmit={onSubmit}>
                     <SuperPasswordField 
                         handleClickShowPassword={handleClickShowPassword}
                         value={password}
@@ -167,7 +148,7 @@ const Reset = ({ match, history,auth }) => {
                             height={60}
                             variant="contained"
                             color="primary"
-                            className={classes.submit}
+                            className={classes.authSubmit}
                         > 
                             Reset    
                         </Button>

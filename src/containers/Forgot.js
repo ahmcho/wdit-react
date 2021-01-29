@@ -2,6 +2,7 @@ import {useState} from 'react';
 import wditAPI from '../api/wdit';
 import {connect} from 'react-redux';
 import { Redirect } from "react-router-dom";
+import useStyles from '../config/styles';
 //Material UI components
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -10,37 +11,11 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Loader from 'react-loader-spinner';
 import { useSnackbar } from 'notistack';
 
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-          marginTop: theme.spacing(2),
-        },
-    },
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%', 
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-}));
 
 const Forgot = ({auth}) => {
     const [email, setEmail] = useState('');
@@ -104,14 +79,14 @@ const Forgot = ({auth}) => {
                 <Redirect to='/dashboard' />
             )}
             <CssBaseline />
-            <div className={classes.paper}>
+            <div className={classes.authPaper}>
                 <Avatar className={classes.avatar}>
                     <LockOpenIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Forgot password?
                 </Typography>
-                <form className={classes.form} onSubmit={onSubmit}>
+                <form className={classes.forgotForm} onSubmit={onSubmit}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -145,7 +120,7 @@ const Forgot = ({auth}) => {
                             height={60}
                             variant="contained"
                             color="primary"
-                            className={classes.submit}
+                            className={classes.forgotSubmit}
                         > 
                             Submit    
                         </Button>
