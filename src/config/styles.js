@@ -1,72 +1,98 @@
-const styles = [
-    {
-        "featureType": "landscape.natural",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#e0efef"
-            }
-        ]
+import {makeStyles} from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    paper: {
+      padding: theme.spacing(2),
+      marginBottom: '1em',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      color: theme.palette.text.primary,
     },
-    {
-        "featureType": "poi",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "hue": "#1900ff"
-            },
-            {
-                "color": "#c0e8e8"
-            }
-        ]
+    delete: {
+        margin: '1ch'
     },
-    {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "lightness": 100
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
+    root: {
+        flexGrow: 1,
     },
-    {
-        "featureType": "road",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
+    nav:{
+        marginBottom: "1em"
     },
-    {
-        "featureType": "transit.line",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "lightness": 700
-            }
-        ]
+    brand:{
+        color: "white"
     },
-    {
-        "featureType": "water",
-        "elementType": "all",
-        "stylers": [
-            {
-                "color": "#7dcdcd"
-            }
-        ]
-    }
-]
-export default styles;
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+    form: {
+        width: '100%',
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: theme.spacing(3),
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+        },
+    },
+    field:{
+        width: '90%',
+    },
+    submit:{
+       margin: "1ch"
+    },
+    listRoot:{
+        width: "100%",
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper
+    },
+    forgotRoot:{
+        width: '100%',
+        '& > * + *': {
+          marginTop: theme.spacing(2),
+        },
+    },
+    authPaper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    forgotForm: {
+        width: '100%', 
+        marginTop: theme.spacing(1),
+    },
+    forgotSubmit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+    typographyStyle: {
+        flexGrow: 1,
+        textAlign: "center",
+    },
+    link:{
+        justifyContent: "center",
+        textAlign: "center",
+    },
+    loginPaper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    authForm: {
+        width: '100%',
+        marginTop: theme.spacing(1),
+    },
+    authSubmit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+}));
+
+export default useStyles;
