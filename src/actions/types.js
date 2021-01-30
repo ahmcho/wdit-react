@@ -17,9 +17,6 @@ export const DELETE_TRIP = "DELETE_TRIP";
 
 //Users
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
-export const GET_CURRENT_USER = "GET_CURRENT_USER";
-export const LOGIN_USER = "LOGIN_USER";
-export const CREATE_USER = "CREATE_USER";
 export const GET_USER_TRIPS = "GET_USER_TRIPS";
 export const UPDATE_USER = "UPDATE_USER";
 export const DELETE_USER = "DELETE_USER";
