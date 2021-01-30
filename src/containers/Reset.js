@@ -96,7 +96,7 @@ const Reset = ({ match, history,auth }) => {
     return(
         <Container component="main" maxWidth="xs">
             {auth.isAuthenticated && (
-                <Redirect to='/dashboard' />
+                <Redirect to='/' />
             )}
             <CssBaseline />
             <div className={classes.authPaper}>

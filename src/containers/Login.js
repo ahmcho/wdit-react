@@ -75,7 +75,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
     return (
         <div>
             {auth.isAuthenticated ? (
-                <Redirect to='/dashboard' />
+                <Redirect to='/' />
             ) : (
                 <>
                     <Container component="main" maxWidth="xs">
