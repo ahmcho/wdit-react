@@ -49,3 +49,10 @@ export const logoutUser = (history) => dispatch => {
   dispatch(setCurrentUser({}));
   dispatch({ type: RESET })
 };
+
+export const deleteUser = (history) => async dispatch => {
+  //send delete request
+  await wditAPI.delete(`/api/users/me`);
+  //logout user
+  dispatch(logoutUser());
+}
