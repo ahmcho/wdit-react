@@ -8,6 +8,8 @@ import Register from './containers/Register';
 import NotFound from './containers/NotFound';
 import Forgot from './containers/Forgot';
 import Reset from './containers/Reset';
+import Public from './routers/Public';
+import Private from './routers/Private';
 import { Provider } from 'react-redux';
 import store from './store';
 import jwt_decode from "jwt-decode";
@@ -42,22 +44,22 @@ if (localStorage.token) {
 const  App = () => {
   return (
     <SnackbarProvider preventDuplicate maxSnack={1}>
-    <Provider store={store}>
-      <Router>
-        <NavBar />
-        <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route path="/about" component={About} />
-            <Route path="/dashboard" component={MyAccount} />
-            <Route path="/register" component={Register} />
-            <Route path="/login" component={Login} />
-            <Route path="/forgot" component={Forgot} />
-            <Route path="/trips/:tripId" component={Trip} />
-            <Route path="/reset/:token" component={Reset} />
-            <Route component={NotFound} />
-        </Switch>
-      </Router>
-    </Provider>
+      <Provider store={store}>
+        <Router>
+          <NavBar />
+          <Switch>
+              <Private exact path="/" component={Landing} />
+              <Route path="/about" component={About} />
+              <Private path="/dashboard" component={MyAccount} />
+              <Public path="/register" component={Register} />
+              <Public path="/login" component={Login} />
+              <Public path="/forgot" component={Forgot} />
+              <Private path="/trips/:tripId" component={Trip} />
+              <Public path="/reset/:token" component={Reset} />
+              <Route component={NotFound} />
+          </Switch>
+        </Router>
+      </Provider>
     </SnackbarProvider>
   );
 }
