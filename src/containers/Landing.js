@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { Link as RouterLink, useHistory, Redirect } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { connect } from "react-redux";
 import {getTrips} from '../actions/trips';
 import { startLoading, stopLoading } from '../actions/ui';
@@ -14,7 +14,7 @@ import MapComponent from '../components/MapComponent';
 import useStyles from '../config/styles';
 
 
-const Landing = ({auth, trips, error, ui, getTrips, startLoading, stopLoading}) => {
+const Landing = ({ trips, error, ui, getTrips, startLoading, stopLoading}) => {
     const classes = useStyles();
     const history = useHistory();
     let areTripsEmpty = trips.length === 0;
@@ -23,67 +23,64 @@ const Landing = ({auth, trips, error, ui, getTrips, startLoading, stopLoading}) 
         startLoading();
         await getTrips();
         stopLoading();
-    } 
+    };
+     
     useEffect(() => {
-        if(areTripsEmpty & auth.isAuthenticated){
+        if(areTripsEmpty){
             // eslint-disable-next-line
             fetchTrips()
         } 
         return history.listen((location,action) => {
-            if(auth.isAuthenticated && location.pathname === '/'){
+            if(location.pathname === '/'){
                 // eslint-disable-next-line
                 fetchTrips();
             }
         })
-    },[auth, history, areTripsEmpty, trips]);
+    },[ history, areTripsEmpty, trips]);
     
     return (
         <Grid container>
-            {auth.isAuthenticated ? (
-                <>
-                    {error !== '' && (
-                        <>
-                            <Grid item xs={12}>
-                                <Typography className={classes.typographyStyle} variant="h6">{error}</Typography>
-                            </Grid>
-                       </>
-                    )}
-                    {ui.loading ? (
-                        <Grid container>
-                            <Grid item xs align="center">
-                                <Loader
-                                    type="Rings"
-                                    color="#3f51b5"
-                                    height={100}
-                                    width={100}
-                                />
-                            </Grid>
+            <>
+                {error !== '' && (
+                    <>
+                        <Grid item xs={12}>
+                            <Typography className={classes.typographyStyle} variant="h6">{error}</Typography>
                         </Grid>
-                    ) : 
-                        (!areTripsEmpty ?
-                            (
-                                <>
-                                    <MapComponent trips={trips}/>
-                                    <Typography className={classes.typographyStyle} variant="subtitle2">Zoom out to see all trips</Typography>
-                                </>
-                            ) : (
-                                <>
-                                    <Grid align="center" item xs={12}>
-                                        <Button component={RouterLink} to="/dashboard" color="primary"><AddIcon />{"Add a trip"}</Button>
-                                    </Grid>
-                                </>
-                            )   
-                        )
-                    }
-                    
-                </>
-            ):(<Redirect to="/login"/>)}
+                    </>
+                )}
+                {ui.loading ? (
+                    <Grid container>
+                        <Grid item xs align="center">
+                            <Loader
+                                type="Rings"
+                                color="#3f51b5"
+                                height={100}
+                                width={100}
+                            />
+                        </Grid>
+                    </Grid>
+                ) : 
+                    (!areTripsEmpty ?
+                        (
+                            <>
+                                <MapComponent trips={trips}/>
+                                <Typography className={classes.typographyStyle} variant="subtitle2">Zoom out to see all trips</Typography>
+                            </>
+                        ) : (
+                            <>
+                                <Grid align="center" item xs={12}>
+                                    <Button component={RouterLink} to="/dashboard" color="primary"><AddIcon />{"Add a trip"}</Button>
+                                </Grid>
+                            </>
+                        )   
+                    )
+                }        
+            </>
         </Grid>
     )
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth,
     error: state.error,
     trips: state.trips,
     ui: state.ui
