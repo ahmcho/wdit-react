@@ -77,7 +77,7 @@ const NavBar = ({auth, logoutUser }) => {
                   }}
                   onClose={handleClose}
                 >
-                  <MenuItem key="1" component={RouterLink} to="/dashboard"><DashboardIcon /> Dashboard</MenuItem>
+                  <MenuItem key="1" component={RouterLink} onClick={() => setAnchorEl(null) } to="/dashboard"><DashboardIcon /> Dashboard</MenuItem>
                   <MenuItem key="2" onClick={handleLogout}><ExitToAppIcon/> Logout</MenuItem>
                 </Menu>
               </>
