@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
-import { withRouter, Redirect, Link as RouterLink } from "react-router-dom"
+import { withRouter, Link as RouterLink } from "react-router-dom"
 import { loginUser } from "../actions/auth";
 import { startLoading, stopLoading } from "../actions/ui";
 import { clearErrors } from "../actions/error";
@@ -27,7 +27,7 @@ const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoading }) => {
+const Login = ({ auth, ui, history, error, loginUser, clearErrors, startLoading, stopLoading }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -52,7 +52,7 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
         e.preventDefault();
         const userData = { email, password };
         startLoading();
-        await loginUser(userData);
+        await loginUser(userData, history);
         stopLoading();
     }
 
@@ -73,110 +73,102 @@ const Login = ({ auth, ui, error, loginUser, clearErrors, startLoading, stopLoad
     };
 
     return (
-        <div>
-            {auth.isAuthenticated ? (
-                <Redirect to='/' />
-            ) : (
-                <>
-                    <Container component="main" maxWidth="xs">
-                        <CssBaseline />
-                        <div className={classes.loginPaper}>
-                            <Avatar className={classes.avatar}>
-                                <LockOutlinedIcon />
-                            </Avatar>
-                            <Typography component="h1" variant="h5">
-                                Sign in
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.loginPaper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
                             </Typography>
-                            {error.length !== 0 && (
-                                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                                    <Alert onClose={handleClose} severity="error">
-                                        {error}
-                                    </Alert>
-                                </Snackbar>
-                            )}
-                            <form className={classes.authForm} onSubmit={onSubmit}>
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    id="email"
-                                    type="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    value={email}
-                                    onChange={onEmailChange}
-                                    error={error.length !== 0}
-                                    fullWidth
-                                    required
-                                    autoFocus
+                {error.length !== 0 && (
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="error">
+                            {error}
+                        </Alert>
+                    </Snackbar>
+                )}
+                <form className={classes.authForm} onSubmit={onSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        id="email"
+                        type="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        value={email}
+                        onChange={onEmailChange}
+                        error={error.length !== 0}
+                        fullWidth
+                        required
+                        autoFocus
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type={showPassword ? 'text' : 'password'}
+                        error={error.length !== 0}
+                        value={password}
+                        onChange={onPasswordChange}
+                        id="password"
+                        autoComplete="current-password"
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }}
+                    />
+                    {ui.loading ? (
+                        <Grid container>
+                            <Grid item xs align="center">
+                                <Loader
+                                    type="Rings"
+                                    color="#3f51b5"
+                                    height={100}
+                                    width={100}
                                 />
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type={showPassword ? 'text' : 'password'}
-                                    error={error.length !== 0}
-                                    value={password}
-                                    onChange={onPasswordChange}
-                                    id="password"
-                                    autoComplete="current-password"
-                                    InputProps={{ 
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword}
-                                                onMouseDown={handleMouseDownPassword}
-                                                >
-                                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                />
-                                {ui.loading ? (
-                                    <Grid container>
-                                        <Grid item xs align="center">
-                                            <Loader
-                                                type="Rings"
-                                                color="#3f51b5"
-                                                height={100}
-                                                width={100}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                ) : (
-                                    <Button
-                                        type="submit"
-                                        fullWidth
-                                        variant="contained"
-                                        color="primary"
-                                        className={classes.authSubmit}
-                                    > 
-                                        Sign In
-                                    </Button>
-                                )}
-                                <Grid container>
-                                    <Grid item xs>
-                                        <Link variant="body2" component={RouterLink} to="/forgot">
-                                            Forgot password?
+                            </Grid>
+                        </Grid>
+                    ) : (
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.authSubmit}
+                            >
+                                Sign In
+                            </Button>
+                        )}
+                    <Grid container>
+                        <Grid item xs>
+                            <Link variant="body2" component={RouterLink} to="/forgot">
+                                Forgot password?
                                         </Link>
-                                    </Grid>
-                                    <Grid item>
-                                        <Link  variant="body2" component={RouterLink} to="/register">
-                                            {"Don't have an account? Sign Up"}
-                                        </Link>
-                                    </Grid>
-                                </Grid>
-                            </form>
-                        </div>
-                    </Container>                                
-                </>
-            )}
-       </div>
+                        </Grid>
+                        <Grid item>
+                            <Link variant="body2" component={RouterLink} to="/register">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </form>
+            </div>
+        </Container>  
     )
 }
 
@@ -186,7 +178,7 @@ const mapStateToProps = state => ({
     ui: state.ui
   });
   
-  export default connect(
+  export default withRouter(connect(
     mapStateToProps,
     { loginUser, clearErrors, startLoading, stopLoading }
-  )(withRouter(Login));
+  )(Login));
