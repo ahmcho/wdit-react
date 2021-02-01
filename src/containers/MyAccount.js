@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from "react-redux";
 import {Redirect} from 'react-router-dom';
-import { createTrip,getTrips } from '../actions/trips';
+import { createTrip } from '../actions/trips';
 import { logoutUser, deleteUser } from '../actions/auth';
 import TripForm from '../components/TripForm';
 import TabPanel from '../components/TabPanel';
@@ -66,71 +66,65 @@ const MyAccount = ({auth, trips, error, logoutUser, deleteUser}) => {
             {error.toString().includes('Unauthorized') && (
                 <Redirect to="/login"/>
             )}
-            {auth.isAuthenticated 
-                ? (
-                    <Grid container justify="center" alignItems="center"  spacing={3}>
-                        <Grid item xs={12}>
-                            <AppBar position="static">
-                                <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="simple tabs example">
-                                <Tab label="Manage" {...a11yProps(0)} icon={<ListIcon />} />
-                                <Tab label="Create" {...a11yProps(1)} icon={<AddIcon />} />
-                                <Tab label="Settings" {...a11yProps(2)} icon={<SettingsIcon />} />
-                                </Tabs>
-                            </AppBar>
-                            <TabPanel value={value} index={0}>
-                                <Container maxWidth="sm" spacing={3}>
-                                    <div className={classes.paper}>
-                                        <Grid container justify="center" alignItems="center"  spacing={3}>
-                                            <Grid item xs={12}>
-                                                <Paper className={classes.paper}>
-                                                    <Typography variant="h4">
-                                                        Manage your trips
-                                                    </Typography>
-                                                </Paper>
-                                            </Grid>
-                                            <TripList trips={trips} />
-                                        </Grid>
-                                    </div>
-                                </Container>
-                            </TabPanel>
-                            <TabPanel value={value} index={1}>
-                                <TripForm 
-                                        formTitle="Add a trip"
-                                        buttonTitle="Create"
-                                        startIcon={<AddIcon />}
-                                        onSubmit={createTrip}
-                                />
-                            </TabPanel>
-                            <TabPanel value={value} index={2}>
-                                <Grid container justify="center" alignItems="center"  spacing={3}>
+            <Grid container justify="center" alignItems="center" spacing={3}>
+                <Grid item xs={12}>
+                    <AppBar position="static">
+                        <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="simple tabs example">
+                            <Tab label="Manage" {...a11yProps(0)} icon={<ListIcon />} />
+                            <Tab label="Create" {...a11yProps(1)} icon={<AddIcon />} />
+                            <Tab label="Settings" {...a11yProps(2)} icon={<SettingsIcon />} />
+                        </Tabs>
+                    </AppBar>
+                    <TabPanel value={value} index={0}>
+                        <Container maxWidth="sm" spacing={3}>
+                            <div className={classes.paper}>
+                                <Grid container justify="center" alignItems="center" spacing={3}>
                                     <Grid item xs={12}>
-                                        <Button
-                                            height={60}
-                                            variant="contained"
-                                            className={classes.delete}
-                                            color="primary"
-                                            onClick={handleClickOpen}
-                                            endIcon={<DeleteForeverIcon />}
-                                        > 
-                                            Delete your account    
-                                        </Button>
-                                        <Alert 
-                                            open={open}
-                                            text="This action is permanent! Your account and all trips associated with it will be removed!"
-                                            title="Are you sure?"
-                                            handleClose={handleClose}
-                                            handleDisagree={handleDisagree}
-                                            handleAgree={handleAgree}
-                                        />
+                                        <Paper className={classes.paper}>
+                                            <Typography variant="h4">
+                                                Manage your trips
+                                                    </Typography>
+                                        </Paper>
                                     </Grid>
+                                    <TripList trips={trips} />
                                 </Grid>
-                            </TabPanel>
+                            </div>
+                        </Container>
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <TripForm
+                            formTitle="Add a trip"
+                            buttonTitle="Create"
+                            startIcon={<AddIcon />}
+                            onSubmit={createTrip}
+                        />
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                        <Grid container justify="center" alignItems="center" spacing={3}>
+                            <Grid item xs={12}>
+                                <Button
+                                    height={60}
+                                    variant="contained"
+                                    className={classes.delete}
+                                    color="primary"
+                                    onClick={handleClickOpen}
+                                    endIcon={<DeleteForeverIcon />}
+                                >
+                                    Delete your account
+                                        </Button>
+                                <Alert
+                                    open={open}
+                                    text="This action is permanent! Your account and all trips associated with it will be removed!"
+                                    title="Are you sure?"
+                                    handleClose={handleClose}
+                                    handleDisagree={handleDisagree}
+                                    handleAgree={handleAgree}
+                                />
+                            </Grid>
                         </Grid>
-                    </Grid>
-                ) : (
-                    <Redirect to='/login' />
-                )
-            }
+                    </TabPanel>
+                </Grid>
+            </Grid>
         </Container>
     )
 }
