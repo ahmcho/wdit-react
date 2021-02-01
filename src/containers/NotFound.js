@@ -16,7 +16,7 @@ const NotFound = () => {
                 </Grid>
                 <Grid item xs={12} align="center">
                     <Link variant="body2" component={RouterLink} to="/">
-                        Go back
+                        Go home
                     </Link>
                 </Grid>
             </Grid>
