@@ -1,7 +1,7 @@
 import wditAPI from '../api/wdit';
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER, RESET } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, RESET,CLEAR_ERRORS } from "./types";
 
 // Register User
 export const registerUser =  (userData, history) => async dispatch => {
@@ -25,6 +25,7 @@ export const loginUser = (userData, history) => async dispatch => {
     localStorage.setItem("token", token); 
     const decoded = jwt_decode(token);
     dispatch(setCurrentUser(decoded));
+    dispatch({ type: CLEAR_ERRORS })
     history.push('/');
   } catch (err) {
     dispatch({
