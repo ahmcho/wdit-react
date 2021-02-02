@@ -96,6 +96,7 @@ const TripForm = ({formTitle, buttonTitle, data='', handleDelete, handleUpdate, 
                             name="location"
                             label="Location"
                             value={location}
+                            disabled={!!data}
                             InputProps={{
                                 readOnly: !!data,
                             }}
