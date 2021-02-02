@@ -59,7 +59,7 @@ const NavBar = ({auth, logoutUser }) => {
             ) : (
               <>
                 <Button color="inherit" startIcon={<AccountCircleIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                  {auth.user.name}
+                  {auth.user.name.split(' ')[0]}
                 </Button>
                 <Menu
                   id="simple-menu"
