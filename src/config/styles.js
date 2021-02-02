@@ -55,6 +55,22 @@ const useStyles = makeStyles((theme) => ({
           marginTop: theme.spacing(2),
         },
     },
+    dashboardRoot:{
+        '& > *': {
+            margin: theme.spacing(2),
+            width: '90%',
+          },
+    },
+    tripListRoot: {
+        width: "100%",
+        "& > * + *": {
+          marginTop: theme.spacing(2)
+        },
+        "& .MuiPagination-ul" : {
+            display: "flex",
+            justifyContent: "center"
+        }
+      },
     authPaper: {
         marginTop: theme.spacing(8),
         display: 'flex',
