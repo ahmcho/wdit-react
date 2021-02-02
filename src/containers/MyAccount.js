@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 //Components
 import Alert from '../components/Alert';
@@ -22,6 +23,8 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import { Paper, Typography } from '@material-ui/core';
 
+import Loader from 'react-loader-spinner';
+
   
 function a11yProps(index) {
     return {
@@ -29,9 +32,9 @@ function a11yProps(index) {
       'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-const MyAccount = ({auth, trips, error, logoutUser, deleteUser}) => {
+const MyAccount = ({auth,ui, trips, error, logoutUser, deleteUser}) => {
     const [value, setValue] = useState(0);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const classes = useStyles();
 
     const handleChange = (event, newValue) => {
@@ -54,7 +57,6 @@ const MyAccount = ({auth, trips, error, logoutUser, deleteUser}) => {
 
     const handleDisagree = () => {
         setOpen(false);
-        //dont delete account
     }
 
     useEffect(() => {
@@ -78,7 +80,19 @@ const MyAccount = ({auth, trips, error, logoutUser, deleteUser}) => {
                     <TabPanel value={value} index={0}>
                         <Container maxWidth="sm" spacing={3}>
                             <div className={classes.paper}>
-                                <Grid container justify="center" alignItems="center" spacing={3}>
+                                {ui.loading ? (
+                                    <Grid container>
+                                        <Grid item xs align="center">
+                                            <Loader
+                                                type="Rings"
+                                                color="#3f51b5"
+                                                height={100}
+                                                width={100}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                ):(
+                                    <Grid container justify="center" alignItems="center" spacing={3}>
                                     <Grid item xs={12}>
                                         <Paper className={classes.paper}>
                                             <Typography variant="h4">
@@ -88,6 +102,7 @@ const MyAccount = ({auth, trips, error, logoutUser, deleteUser}) => {
                                     </Grid>
                                     <TripList trips={trips} />
                                 </Grid>
+                                )}
                             </div>
                         </Container>
                     </TabPanel>
@@ -100,28 +115,32 @@ const MyAccount = ({auth, trips, error, logoutUser, deleteUser}) => {
                         />
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        <Grid container justify="center" alignItems="center" spacing={3}>
-                            <Grid item xs={12}>
-                                <Button
-                                    height={60}
-                                    variant="contained"
-                                    className={classes.delete}
-                                    color="primary"
-                                    onClick={handleClickOpen}
-                                    endIcon={<DeleteForeverIcon />}
-                                >
-                                    Delete your account
+                        <Container maxWidth="sm" spacing={3}>
+                            <Grid container justify="center" alignItems="center" spacing={1}>
+                                <div className={classes.paper}>
+                                    <Box component="span" m={4}>
+                                        <Button
+                                            height={60}
+                                            variant="contained"
+                                            className={classes.delete}
+                                            color="secondary"
+                                            onClick={handleClickOpen}
+                                            endIcon={<DeleteForeverIcon />}
+                                        >
+                                            Delete your account
                                         </Button>
-                                <Alert
-                                    open={open}
-                                    text="This action is permanent! Your account and all trips associated with it will be removed!"
-                                    title="Are you sure?"
-                                    handleClose={handleClose}
-                                    handleDisagree={handleDisagree}
-                                    handleAgree={handleAgree}
-                                />
+                                        <Alert
+                                            open={open}
+                                            text="This action is permanent! Your account and all trips associated with it will be removed!"
+                                            title="Are you sure?"
+                                            handleClose={handleClose}
+                                            handleDisagree={handleDisagree}
+                                            handleAgree={handleAgree}
+                                        />
+                                    </Box>
+                                </div>
                             </Grid>
-                        </Grid>
+                        </Container>
                     </TabPanel>
                 </Grid>
             </Grid>
@@ -132,7 +151,8 @@ const MyAccount = ({auth, trips, error, logoutUser, deleteUser}) => {
 const mapStateToProps = state => ({
     auth: state.auth,
     error: state.error,
-    trips: state.trips
+    trips: state.trips,
+    ui: state.ui
 });
   
 export default connect(
