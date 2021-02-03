@@ -3,8 +3,8 @@ import mapStyles from './mapStyles';
 export const libraries = ["places"];
 
 export const mapContainerStyle = {
-    width: '100vw',
-    height: '50vh'
+    width: '100%',
+    height: '85vh'
 };
 
 export const center = {
