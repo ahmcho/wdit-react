@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { connect } from "react-redux";
 import {getTrips} from '../actions/trips';
+import { logoutUser } from '../actions/auth';
 import { startLoading, stopLoading } from '../actions/ui';
 
 import Grid from '@material-ui/core/Grid';
@@ -14,7 +15,7 @@ import MapComponent from '../components/MapComponent';
 import useStyles from '../config/styles';
 
 
-const Landing = ({ trips, error, ui, getTrips, startLoading, stopLoading}) => {
+const Landing = ({ trips, error, ui, getTrips, startLoading, stopLoading, logoutUser}) => {
     const classes = useStyles();
     const history = useHistory();
     let areTripsEmpty = trips.length === 0;
@@ -24,6 +25,10 @@ const Landing = ({ trips, error, ui, getTrips, startLoading, stopLoading}) => {
         await getTrips();
         stopLoading();
     };
+
+    useEffect(() => {
+        error === 'Unauthorized' && logoutUser();
+    },[error])
      
     useEffect(() => {
         if(areTripsEmpty){
@@ -88,5 +93,5 @@ const mapStateToProps = state => ({
   
 export default connect(
     mapStateToProps,
-    {getTrips, startLoading, stopLoading}
+    {getTrips, startLoading, stopLoading, logoutUser}
 )(Landing);
